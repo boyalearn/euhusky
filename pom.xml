@@ -6,5 +6,8 @@
   <packaging>pom</packaging>
   <modules>
   	<module>euhusky-register</module>
+  	<module>euhusky-serialization</module>
+  	<module>euhusky-rpc</module>
+  	<module>euhusky-remote</module>
   </modules>
 </project>
