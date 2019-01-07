@@ -7,4 +7,7 @@
   </parent>
   <artifactId>euhusky-register</artifactId>
   <packaging>pom</packaging>
+  <modules>
+  	<module>euhusky-register-api</module>
+  </modules>
 </project>

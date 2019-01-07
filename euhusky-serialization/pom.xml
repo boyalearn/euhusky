@@ -7,4 +7,7 @@
   </parent>
   <artifactId>euhusky-serialization</artifactId>
   <packaging>pom</packaging>
+  <modules>
+  	<module>euhusky-serialization-api</module>
+  </modules>
 </project>

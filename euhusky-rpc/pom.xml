@@ -7,4 +7,7 @@
   </parent>
   <artifactId>euhusky-rpc</artifactId>
   <packaging>pom</packaging>
+  <modules>
+  	<module>euhusky-rpc-api</module>
+  </modules>
 </project>
