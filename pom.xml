@@ -13,12 +13,19 @@
 			<artifactId>spring-context</artifactId>
 			<version>5.1.3.RELEASE</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>1.5.9.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<modules>
 		<module>euhusky-register</module>
 		<module>euhusky-serialization</module>
 		<module>euhusky-rpc</module>
 		<module>euhusky-remote</module>
+		<module>euhusky-config</module>
 	</modules>
 
 	<build>
