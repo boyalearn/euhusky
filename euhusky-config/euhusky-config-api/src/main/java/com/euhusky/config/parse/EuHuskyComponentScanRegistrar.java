@@ -42,22 +42,20 @@ public class EuHuskyComponentScanRegistrar implements ImportBeanDefinitionRegist
     private void registerReferenceAnnotationBeanPostProcessor(BeanDefinitionRegistry registry) {
 
  
-            RootBeanDefinition beanDefinition = new RootBeanDefinition(ReferenceAnnotationBeanPostProcessor.class);
-            beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-            registry.registerBeanDefinition(ReferenceAnnotationBeanPostProcessor.BEAN_NAME, beanDefinition);
+        RootBeanDefinition beanDefinition = new RootBeanDefinition(ReferenceAnnotationBeanPostProcessor.class);
+        beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+        registry.registerBeanDefinition(ReferenceAnnotationBeanPostProcessor.BEAN_NAME, beanDefinition);
 
 
     }
 	
 	private Set<String> getPackagesToScan(AnnotationMetadata metadata){
-		 AnnotationAttributes attributes = AnnotationAttributes.fromMap(
+		AnnotationAttributes attributes = AnnotationAttributes.fromMap(
 	                metadata.getAnnotationAttributes(EuHuskyComponetScan.class.getName()));
-	        String[] basePackages = attributes.getStringArray("basePackages");
-	
-	        // Appends value array attributes
-	        Set<String> packagesToScan = new LinkedHashSet<String>();
-	        packagesToScan.addAll(Arrays.asList(basePackages));
-	        return packagesToScan;
+	    String[] basePackages = attributes.getStringArray("basePackages");
+	    Set<String> packagesToScan = new LinkedHashSet<String>();
+	    packagesToScan.addAll(Arrays.asList(basePackages));
+	    return packagesToScan;
 	}
 
 }

@@ -14,9 +14,5 @@ import com.euhusky.config.parse.EuHuskyComponentScanRegistrar;
 @Documented
 @Import({EuHuskyComponentScanRegistrar.class})
 public @interface EuHuskyComponetScan {
-	String[] value() default {};
-
 	String[] basePackages() default {};
-
-	Class<?>[] basePackageClasses() default {};
 }

@@ -1,2 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.euhusky.config.ApplicationConfig
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#com.euhusky.config.ApplicationConfig

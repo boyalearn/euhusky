@@ -8,8 +8,12 @@ import org.springframework.context.ApplicationContextAware;
 import com.euhusky.app.bean.HelloService;
 
 public class ApplicationConfig implements ApplicationContextAware,InitializingBean {
+	
+	
+	private RegistryConfig registry;
 
 	private ApplicationContext context;
+	
 	@Override
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
 		this.context=context;
@@ -19,7 +23,16 @@ public class ApplicationConfig implements ApplicationContextAware,InitializingBe
 	
 		Object obj=this.context.getBean(HelloService.class);
 		System.out.println(obj);
-		
 	}
+	
+	public RegistryConfig getRegistry() {
+		return registry;
+	}
+	
+	public void setRegistry(RegistryConfig registry) {
+		this.registry = registry;
+	}
+	
+	
 
 }

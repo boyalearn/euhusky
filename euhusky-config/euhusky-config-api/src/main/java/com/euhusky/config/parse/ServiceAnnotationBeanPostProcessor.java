@@ -12,6 +12,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.SingletonBeanRegistry;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.BeanNameGenerator;
@@ -22,13 +24,18 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.euhusky.annotation.context.Service;
+import com.euhusky.config.ServiceBean;
 
 import static org.springframework.context.annotation.AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR;
+import static org.springframework.util.ClassUtils.resolveClassName;
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 
 public class ServiceAnnotationBeanPostProcessor
 		implements BeanDefinitionRegistryPostProcessor, EnvironmentAware, ResourceLoaderAware, BeanClassLoaderAware {
@@ -38,8 +45,7 @@ public class ServiceAnnotationBeanPostProcessor
 	private final Set<String> packagesToScan;
 
 	private Environment environment;
-	
-	@SuppressWarnings("unused")
+
 	private ClassLoader classLoader;
 
 	private ResourceLoader resourceLoader;
@@ -59,18 +65,18 @@ public class ServiceAnnotationBeanPostProcessor
 
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
-		this.classLoader=classLoader;
+		this.classLoader = classLoader;
 	}
 
 	@Override
 	public void setResourceLoader(ResourceLoader resourceLoader) {
-		this.resourceLoader=resourceLoader;
+		this.resourceLoader = resourceLoader;
 
 	}
 
 	@Override
 	public void setEnvironment(Environment environment) {
-		this.environment=environment;
+		this.environment = environment;
 
 	}
 
@@ -98,38 +104,35 @@ public class ServiceAnnotationBeanPostProcessor
 		}
 		return resolvedPackagesToScan;
 	}
-	
 
 	private BeanNameGenerator resolveBeanNameGenerator(BeanDefinitionRegistry registry) {
 
-        BeanNameGenerator beanNameGenerator = null;
+		BeanNameGenerator beanNameGenerator = null;
 
-        if (registry instanceof SingletonBeanRegistry) {
-            SingletonBeanRegistry singletonBeanRegistry = SingletonBeanRegistry.class.cast(registry);
-            beanNameGenerator = (BeanNameGenerator) singletonBeanRegistry.getSingleton(CONFIGURATION_BEAN_NAME_GENERATOR);
-        }
+		if (registry instanceof SingletonBeanRegistry) {
+			SingletonBeanRegistry singletonBeanRegistry = SingletonBeanRegistry.class.cast(registry);
+			beanNameGenerator = (BeanNameGenerator) singletonBeanRegistry
+					.getSingleton(CONFIGURATION_BEAN_NAME_GENERATOR);
+		}
 
-        if (beanNameGenerator == null) {
+		if (beanNameGenerator == null) {
 
-            if (logger.isInfoEnabled()) {
+			if (logger.isInfoEnabled()) {
 
-                logger.info("BeanNameGenerator bean can't be found in BeanFactory with name ["
-                        + CONFIGURATION_BEAN_NAME_GENERATOR + "]");
-                logger.info("BeanNameGenerator will be a instance of " +
-                        AnnotationBeanNameGenerator.class.getName() +
-                        " , it maybe a potential problem on bean name generation.");
-            }
+				logger.info("BeanNameGenerator bean can't be found in BeanFactory with name ["
+						+ CONFIGURATION_BEAN_NAME_GENERATOR + "]");
+				logger.info("BeanNameGenerator will be a instance of " + AnnotationBeanNameGenerator.class.getName()
+						+ " , it maybe a potential problem on bean name generation.");
+			}
 
-            beanNameGenerator = new AnnotationBeanNameGenerator();
+			beanNameGenerator = new AnnotationBeanNameGenerator();
 
-        }
+		}
 
-        return beanNameGenerator;
+		return beanNameGenerator;
 
-    }
-	
-	
-	
+	}
+
 	private void registerServiceBeans(Set<String> packagesToScan, BeanDefinitionRegistry registry) {
 
 		EuHuskyClassPathBeanDefinitionScanner scanner = new EuHuskyClassPathBeanDefinitionScanner(registry, environment,
@@ -174,35 +177,80 @@ public class ServiceAnnotationBeanPostProcessor
 		}
 
 	}
-	
+
 	private void registerServiceBean(BeanDefinitionHolder beanDefinitionHolder, BeanDefinitionRegistry registry,
 			EuHuskyClassPathBeanDefinitionScanner scanner) {
-		
+		Class<?> beanClass = resolveClass(beanDefinitionHolder);
+
+		Service service = findAnnotation(beanClass, Service.class);
+		String beanName=buildBeanName(beanClass,service);
+		AbstractBeanDefinition serviceBeanDefinition=buildServiceBeanDefinition(service,beanClass);
+		registry.registerBeanDefinition(beanName, serviceBeanDefinition);
 		System.out.println(beanDefinitionHolder);
-		
+
 	}
 	
-
-	private Set<BeanDefinitionHolder> findServiceBeanDefinitionHolders(
-            ClassPathBeanDefinitionScanner scanner, String packageToScan, BeanDefinitionRegistry registry,
-            BeanNameGenerator beanNameGenerator) {
-
-        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(packageToScan);
-
-        Set<BeanDefinitionHolder> beanDefinitionHolders = new LinkedHashSet<BeanDefinitionHolder>(beanDefinitions.size());
-
-        for (BeanDefinition beanDefinition : beanDefinitions) {
-
-            String beanName = beanNameGenerator.generateBeanName(beanDefinition, registry);
-            BeanDefinitionHolder beanDefinitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);
-            beanDefinitionHolders.add(beanDefinitionHolder);
-
-        }
-
-        return beanDefinitionHolders;
-
+	private AbstractBeanDefinition buildServiceBeanDefinition(Service service, Class<?> beanClass) {
+		BeanDefinitionBuilder builder = rootBeanDefinition(ServiceBean.class);
+		
+		addPropertyValue(builder, "service", beanClass);
+		
+		String value=service.value();
+		if(StringUtils.hasText(value)){
+			addPropertyValue(builder, "value", value);
+		}
+		return builder.getBeanDefinition();
+	}
+	private void addPropertyValue(BeanDefinitionBuilder builder, String propertyName, String beanName) {
+        String resolvedBeanName = environment.resolvePlaceholders(beanName);
+        builder.addPropertyValue(propertyName, resolvedBeanName);
     }
 	
+	private void addPropertyValue(BeanDefinitionBuilder builder, String propertyName, Object propertyValue) {
+        builder.addPropertyValue(propertyName, propertyValue);
+    }
 	
+	private String buildBeanName(Class<?> beanClass,Service service){
+		return "@ServiceBean:"+beanClass.getName();
+	}
+	
+	
+
+
+	private Class<?> resolveClass(BeanDefinitionHolder beanDefinitionHolder) {
+
+		BeanDefinition beanDefinition = beanDefinitionHolder.getBeanDefinition();
+
+		return resolveClass(beanDefinition);
+
+	}
+
+	private Class<?> resolveClass(BeanDefinition beanDefinition) {
+
+		String beanClassName = beanDefinition.getBeanClassName();
+
+		return resolveClassName(beanClassName, classLoader);
+
+	}
+
+	private Set<BeanDefinitionHolder> findServiceBeanDefinitionHolders(ClassPathBeanDefinitionScanner scanner,
+			String packageToScan, BeanDefinitionRegistry registry, BeanNameGenerator beanNameGenerator) {
+
+		Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(packageToScan);
+
+		Set<BeanDefinitionHolder> beanDefinitionHolders = new LinkedHashSet<BeanDefinitionHolder>(
+				beanDefinitions.size());
+
+		for (BeanDefinition beanDefinition : beanDefinitions) {
+
+			String beanName = beanNameGenerator.generateBeanName(beanDefinition, registry);
+			BeanDefinitionHolder beanDefinitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);
+			beanDefinitionHolders.add(beanDefinitionHolder);
+
+		}
+
+		return beanDefinitionHolders;
+
+	}
 
 }
