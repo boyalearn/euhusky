@@ -1,6 +1,6 @@
 package com.euhusky.app.bean;
 
-import com.euhusky.annotation.context.Service;
+import com.euhusky.config.annotation.context.Service;
 
 @Service("HHHH")
 public class DemoService {

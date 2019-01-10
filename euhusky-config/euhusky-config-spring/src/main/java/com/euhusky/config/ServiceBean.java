@@ -2,7 +2,7 @@ package com.euhusky.config;
 
 import org.springframework.beans.factory.InitializingBean;
 
-public class ServiceBean implements ServiceConfig,InitializingBean{
+public class ServiceBean implements Service,InitializingBean{
 
 	private static final long serialVersionUID = 8803916098760132436L;
 	

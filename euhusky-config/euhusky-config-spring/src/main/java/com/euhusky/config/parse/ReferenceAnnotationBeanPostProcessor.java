@@ -25,8 +25,8 @@ import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.euhusky.annotation.context.Reference;
 import com.euhusky.config.ReferenceBean;
+import com.euhusky.config.annotation.context.Reference;
 
 import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
 
@@ -191,13 +191,19 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         ReferenceBean referenceBean = referenceBeansCache.get(referenceBeanCacheKey);
 
         if (referenceBean == null) {
-        	//TODO 从注册中心拿到引用
         	referenceBean=new ReferenceBean();
-        	
-        	referenceBean.setRefClass(referenceClass);
-        	
+        	//应用对象如果是接口默认实现为远程代理模式
+        	//否则找到本地引用对象
+        	if(referenceClass.isInterface()){
+        		referenceBean.setRefClass(referenceClass);
+        	}else{
+        		if(reference.remote()){
+        			referenceBean.setRefClass(referenceClass);
+        		}else{
+        		    return context.getBean(referenceClass);
+        		}
+        	} 	
             referenceBeansCache.putIfAbsent(referenceBeanCacheKey, referenceBean);
-
         }
 
 

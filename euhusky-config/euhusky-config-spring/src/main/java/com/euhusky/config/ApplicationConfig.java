@@ -4,17 +4,35 @@ package com.euhusky.config;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public class ApplicationConfig extends AbstractApplicationConfig implements ApplicationContextAware,SmartLifecycle{
+import com.euhusky.common.URL;
+import com.euhusky.common.util.NetWorkUtil;
+import com.euhusky.config.properties.ApplicationProperties;
+import com.euhusky.register.Register;
+import com.euhusky.register.ZookeeperRegister;
+
+@Configuration
+@ConditionalOnClass(ApplicationConfig.class)
+@EnableConfigurationProperties(ApplicationProperties.class)
+public class ApplicationConfig implements Application,ApplicationContextAware,SmartLifecycle{
 	
 	private final Log logger = LogFactory.getLog(getClass());
 	
-	private RegistryConfig registry;
-
 	private ApplicationContext context;
+	
+	@Autowired
+	private Register register;
+
+	@Autowired
+	private ApplicationProperties applicationProperties;
 	
 	
 	@Override
@@ -22,16 +40,9 @@ public class ApplicationConfig extends AbstractApplicationConfig implements Appl
 		this.context=context;
 	}
 	
-	public RegistryConfig getRegistry() {
-		return registry;
-	}
-	
-	public void setRegistry(RegistryConfig registry) {
-		this.registry = registry;
-	}
-	
 	@Override
 	public void start() {
+		logger.info("Application start inbind :"+applicationProperties.getServerPort());
 		String[] serviceNames=context.getBeanNamesForType(ServiceBean.class);
 		for(String serviceName:serviceNames){
 			ServiceBean serviceBean=(ServiceBean)context.getBean(serviceName);
@@ -41,8 +52,11 @@ public class ApplicationConfig extends AbstractApplicationConfig implements Appl
 	}
 	
 	private void registerService(ServiceBean serviceBean){
-		logger.info("registrService "+serviceBean.getService().getName());
-
+		URL url=new URL();
+		url.setServiceName(serviceBean.getService().getName());
+		url.setPort(Integer.valueOf(applicationProperties.getServerPort()));
+		url.setHost(NetWorkUtil.getLocalHost());
+		register.register(url);
 	}
 	@Override
 	public void stop() {
@@ -57,6 +71,20 @@ public class ApplicationConfig extends AbstractApplicationConfig implements Appl
 	public int getPhase() {
 		return 0;
 	}
-
 	
+	@Bean
+	public Register getRegister() {
+		ZookeeperRegister zookeeperRegister=new ZookeeperRegister();
+		return zookeeperRegister;
+	}
+
+	public ApplicationProperties getApplicationProperties() {
+		return applicationProperties;
+	}
+
+	public void setApplicationProperties(ApplicationProperties applicationProperties) {
+		this.applicationProperties = applicationProperties;
+	}
+	
+
 }

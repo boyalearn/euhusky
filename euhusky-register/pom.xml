@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>euhusky-register-api</module>
+  	<module>euhusky-register-zookeeper</module>
   </modules>
 </project>

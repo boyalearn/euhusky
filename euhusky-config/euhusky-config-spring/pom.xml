@@ -14,5 +14,22 @@
 			<artifactId>euhusky-config-api</artifactId>
 			<version>${euhusky.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-register-api</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-register-zookeeper</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-common</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
 	</dependencies>
 </project>

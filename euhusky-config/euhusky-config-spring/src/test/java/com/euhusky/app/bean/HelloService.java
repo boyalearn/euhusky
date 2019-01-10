@@ -1,7 +1,7 @@
 package com.euhusky.app.bean;
 
-import com.euhusky.annotation.context.Reference;
-import com.euhusky.annotation.context.Service;
+import com.euhusky.config.annotation.context.Reference;
+import com.euhusky.config.annotation.context.Service;
 
 @Service
 public class HelloService {

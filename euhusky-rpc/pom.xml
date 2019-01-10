@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>euhusky-rpc-api</module>
+  	<module>euhusky-rpc-euhusky</module>
   </modules>
 </project>

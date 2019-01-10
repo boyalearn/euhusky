@@ -9,6 +9,14 @@
     <properties>
         <euhusky.version>0.0.1-SNAPSHOT</euhusky.version>
     </properties>
+    <modules>
+		<module>euhusky-register</module>
+		<module>euhusky-serialization</module>
+		<module>euhusky-rpc</module>
+		<module>euhusky-remote</module>
+		<module>euhusky-config</module>
+		<module>euhusky-common</module>
+	</modules>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
@@ -23,13 +31,7 @@
 			<version>1.5.9.RELEASE</version>
 		</dependency>
 	</dependencies>
-	<modules>
-		<module>euhusky-register</module>
-		<module>euhusky-serialization</module>
-		<module>euhusky-rpc</module>
-		<module>euhusky-remote</module>
-		<module>euhusky-config</module>
-	</modules>
+	
 
 	<build>
 		<plugins>
