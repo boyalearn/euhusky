@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>euhusky-config-api</module>
+  	<module>euhusky-config-spring</module>
   </modules>
 </project>

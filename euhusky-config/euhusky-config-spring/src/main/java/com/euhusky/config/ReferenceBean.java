@@ -2,23 +2,25 @@ package com.euhusky.config;
 
 import org.springframework.beans.factory.FactoryBean;
 
+import com.euhusky.app.bean.DemoService;
+
 @SuppressWarnings("rawtypes")
 public class ReferenceBean implements ReferenceConfig,FactoryBean{
 
 	private static final long serialVersionUID = 7777073747857096902L;
 	
 	private Object invoke;
+	
+	private Class<?> refClass;
 
 	@Override
 	public Object getObject() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new DemoService();
 	}
 
 	@Override
 	public Class getObjectType() {
-		// TODO Auto-generated method stub
-		return null;
+		return refClass.getClass();
 	}
 
 	public Object getInvoke() {
@@ -28,6 +30,16 @@ public class ReferenceBean implements ReferenceConfig,FactoryBean{
 	public void setInvoke(Object invoke) {
 		this.invoke = invoke;
 	}
+
+	public Class<?> getRefClass() {
+		return refClass;
+	}
+
+	public void setRefClass(Class<?> refClass) {
+		this.refClass = refClass;
+	}
+	
+	
 	
 	
 

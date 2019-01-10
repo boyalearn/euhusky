@@ -161,14 +161,14 @@ public class ServiceAnnotationBeanPostProcessor
 				}
 
 				if (logger.isInfoEnabled()) {
-					logger.info(beanDefinitionHolders.size() + " annotated Dubbo's @Service Components { "
+					logger.info(beanDefinitionHolders.size() + " annotated EuHusky's @Service Components { "
 							+ beanDefinitionHolders + " } were scanned under package[" + packageToScan + "]");
 				}
 
 			} else {
 
 				if (logger.isWarnEnabled()) {
-					logger.warn("No Spring Bean annotating Dubbo's @Service was found under package[" + packageToScan
+					logger.warn("No Spring Bean annotating EuHusky's @Service was found under package[" + packageToScan
 							+ "]");
 				}
 

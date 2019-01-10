@@ -1,6 +1,6 @@
 package com.euhusky.config;
 
-public class RegistryConfig {
+public class RegistryConfig extends AbstractRegistryConfig{
 	
 	private String host;
 	

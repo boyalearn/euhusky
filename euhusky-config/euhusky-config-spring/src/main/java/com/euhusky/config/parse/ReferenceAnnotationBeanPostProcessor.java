@@ -26,6 +26,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.euhusky.annotation.context.Reference;
+import com.euhusky.config.ReferenceBean;
+
 import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
 
 public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter 
@@ -39,7 +41,7 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 	private final ConcurrentMap<String, InjectionMetadata> injectionMetadataCache =
             new ConcurrentHashMap<String, InjectionMetadata>(256);
 	
-	private final ConcurrentMap<String,Object>  referenceBeansCache=new ConcurrentHashMap<String, Object>(256);
+	private final ConcurrentMap<String,ReferenceBean>  referenceBeansCache=new ConcurrentHashMap<String, ReferenceBean>(256);
 	
 	
 	private final Log logger = LogFactory.getLog(getClass());
@@ -69,29 +71,12 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 		this.context=applicationContext;
 	}
 	
-	@Override
-	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName)
-			throws BeansException {
-		if("helloService".equals(beanName)){
-			System.out.println("helloService");
-		}
-		if("demoService".equals(beanName)){
-			System.out.println("demoService");
-		}
-		return null;
-	}
 	
 	@Override
 	public PropertyValues postProcessPropertyValues(
 			PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
 		 InjectionMetadata metadata = findReferenceMetadata(beanName, bean.getClass(), pvs);
 	        try {
-	        	if("demoService".equals(beanName)){
-	    			System.out.println("demoService");
-	    		}
-	        	if("helloService".equals(beanName)){
-	    			System.out.println("helloService");
-	    		}
 	            metadata.inject(bean, beanName, pvs);
 	        } catch (BeanCreationException ex) {
 	            throw ex;
@@ -168,12 +153,7 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		if (beanType != null) {
-//            InjectionMetadata metadata = findReferenceMetadata(beanName, beanType, null);
-//            metadata.checkConfigMembers(beanDefinition);
-        }
-		System.out.println("Refince");
-		
+
 	}
 	
 	
@@ -208,16 +188,21 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
         String referenceBeanCacheKey = referenceClass.getName();
 
-        Object referenceBean = referenceBeansCache.get(referenceBeanCacheKey);
+        ReferenceBean referenceBean = referenceBeansCache.get(referenceBeanCacheKey);
 
         if (referenceBean == null) {
-        	referenceBean=this.context.getBean(referenceClass);
+        	//TODO 从注册中心拿到引用
+        	referenceBean=new ReferenceBean();
+        	
+        	referenceBean.setRefClass(referenceClass);
+        	
             referenceBeansCache.putIfAbsent(referenceBeanCacheKey, referenceBean);
 
         }
 
 
-        return referenceBean;
+        return referenceBean.getObject();
     }
+	
 
 }

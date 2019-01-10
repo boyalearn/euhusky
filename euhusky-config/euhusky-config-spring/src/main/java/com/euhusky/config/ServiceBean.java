@@ -12,7 +12,6 @@ public class ServiceBean implements ServiceConfig,InitializingBean{
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		System.out.println("dfsdfsdfsd");
 	}
 
 	public Class<?> getService() {
