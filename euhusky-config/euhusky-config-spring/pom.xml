@@ -31,5 +31,10 @@
 			<artifactId>euhusky-common</artifactId>
 			<version>${euhusky.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-rpc-api</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
 	</dependencies>
 </project>

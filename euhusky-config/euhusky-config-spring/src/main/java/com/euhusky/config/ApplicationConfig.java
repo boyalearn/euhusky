@@ -14,10 +14,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.euhusky.common.URL;
+import com.euhusky.common.util.JavaSPIUtil;
 import com.euhusky.common.util.NetWorkUtil;
 import com.euhusky.config.properties.ApplicationProperties;
 import com.euhusky.register.Register;
-import com.euhusky.register.ZookeeperRegister;
+import com.euhusky.rpc.proxy.ProxyFactory;
 
 @Configuration
 @ConditionalOnClass(ApplicationConfig.class)
@@ -34,6 +35,16 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	@Autowired
 	private ApplicationProperties applicationProperties;
 	
+	
+	@Bean
+	public Register getRegister() {
+		return (Register)JavaSPIUtil.getImpl(Register.class);
+	}
+	
+	@Bean
+	public ProxyFactory getProxyFactory() {
+		return (ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
+	}
 	
 	@Override
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
@@ -72,11 +83,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		return 0;
 	}
 	
-	@Bean
-	public Register getRegister() {
-		ZookeeperRegister zookeeperRegister=new ZookeeperRegister();
-		return zookeeperRegister;
-	}
+	
 
 	public ApplicationProperties getApplicationProperties() {
 		return applicationProperties;
@@ -85,6 +92,9 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	public void setApplicationProperties(ApplicationProperties applicationProperties) {
 		this.applicationProperties = applicationProperties;
 	}
+	
+	
+	
 	
 
 }

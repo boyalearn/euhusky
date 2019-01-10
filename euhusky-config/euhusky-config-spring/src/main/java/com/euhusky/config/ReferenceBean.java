@@ -1,13 +1,14 @@
 package com.euhusky.config;
 
 import java.util.List;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import com.euhusky.common.URL;
-import com.euhusky.app.bean.DemoService;
+import com.euhusky.register.Register;
+import com.euhusky.rpc.proxy.ProxyFactory;
 
 @SuppressWarnings("rawtypes")
 public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAware{
@@ -18,13 +19,21 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	
 	private List<URL> urls;
 	
+	@Autowired
+	private Register register;
+	
 	private Class<?> refClass;
+	
+	private ProxyFactory proxyFactory;
 	
 	private ApplicationContext applicationContext;
 
 	@Override
 	public Object getObject() throws Exception {
-		return new DemoService();
+		URL url=new URL();
+		url.setServiceName(refClass.getName());
+		this.urls=register.subscribe(url);
+		return proxyFactory.getProxy(refClass).createProxy(refClass, urls);
 	}
 
 	@Override
