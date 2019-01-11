@@ -1,6 +1,6 @@
 package com.euhusky.config;
 
-public class RegistryConfig implements Registry{
+public class RegistryConfig{
 	
 	private String host;
 	

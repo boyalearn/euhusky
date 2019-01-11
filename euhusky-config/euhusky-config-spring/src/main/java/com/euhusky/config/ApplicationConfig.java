@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.euhusky.common.URL;
 import com.euhusky.common.util.JavaSPIUtil;
 import com.euhusky.common.util.NetWorkUtil;
@@ -30,15 +29,21 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	private ApplicationContext context;
 	
 	@Autowired
-	private Register register;
+	private EuhuskyContext euhuskyContext;
 
 	@Autowired
 	private ApplicationProperties applicationProperties;
 	
-	
 	@Bean
 	public Register getRegister() {
-		return (Register)JavaSPIUtil.getImpl(Register.class);
+		Register register= (Register)JavaSPIUtil.getImpl(Register.class);
+		((AbstractEuhuskyContext)euhuskyContext).setRegistry(register);
+		return register;
+	}
+	
+	@Bean
+	public EuhuskyContext getEuhuskyContext() {
+		return (EuhuskyContext)JavaSPIUtil.getImpl(EuhuskyContext.class);
 	}
 	
 	@Bean
@@ -67,7 +72,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		url.setServiceName(serviceBean.getService().getName());
 		url.setPort(Integer.valueOf(applicationProperties.getServerPort()));
 		url.setHost(NetWorkUtil.getLocalHost());
-		register.register(url);
+		((AbstractEuhuskyContext)this.euhuskyContext).getRegistry().register(url);
 	}
 	@Override
 	public void stop() {
