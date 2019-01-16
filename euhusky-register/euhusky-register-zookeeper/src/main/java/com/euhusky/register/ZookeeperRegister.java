@@ -16,4 +16,10 @@ public class ZookeeperRegister implements Register{
 		return null;
 	}
 
+	@Override
+	public void setRegisterUrl(String connectionString) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
