@@ -37,6 +37,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	@Bean
 	public Register getRegister() {
 		Register register= (Register)JavaSPIUtil.getImpl(Register.class);
+		register.setRegisterUrl(applicationProperties.getRegisterUrl());
 		((AbstractEuhuskyContext)euhuskyContext).setRegistry(register);
 		return register;
 	}
@@ -48,7 +49,10 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	
 	@Bean
 	public ProxyFactory getProxyFactory() {
-		return (ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
+		ProxyFactory proxyFactory=(ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
+		proxyFactory.setEuhuskyContext(euhuskyContext);
+		((AbstractEuhuskyContext)euhuskyContext).setProxyFactory(proxyFactory);
+		return proxyFactory;
 	}
 	
 	@Override

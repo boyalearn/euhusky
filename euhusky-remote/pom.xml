@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>euhusky-remote-api</module>
+  	<module>euhusky-remote-netty</module>
   </modules>
 </project>

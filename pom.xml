@@ -16,7 +16,6 @@
 		<module>euhusky-remote</module>
 		<module>euhusky-config</module>
 		<module>euhusky-common</module>
-		<module>euhusky-all</module>
     </modules>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->

@@ -4,12 +4,22 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.UUID;
 
 import com.euhusky.common.URL;
+import com.euhusky.config.AbstractEuhuskyContext;
+import com.euhusky.config.EuhuskyContext;
+import com.euhusky.rpc.context.RpcRequest;
 
 public class JdkProxy implements IProxy,InvocationHandler{
 	
 	private List<URL> urls;
+	
+	private EuhuskyContext euhuskyContext;
+	
+	public JdkProxy(EuhuskyContext euhuskyContext) {
+		this.euhuskyContext=euhuskyContext;
+	}
 	
 	@Override
 	public Object createProxy(Class<?> interfaceClas, List<URL> urls) {
@@ -19,7 +29,11 @@ public class JdkProxy implements IProxy,InvocationHandler{
 
 	@Override
 	public Object invoke(Object bean, Method method, Object[] args) throws Throwable {
-		return null;
+		RpcRequest request=new RpcRequest();
+		request.setRequestId(UUID.randomUUID().toString());
+		request.setMethodName(method.getName());
+		Object result=((AbstractEuhuskyContext)this.euhuskyContext).getClient().send(request);
+		return result;
 	}
 
 }
