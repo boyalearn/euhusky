@@ -8,12 +8,23 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>euhusky-remote-netty</artifactId>
+
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
 			<version>4.1.32.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-remote-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
