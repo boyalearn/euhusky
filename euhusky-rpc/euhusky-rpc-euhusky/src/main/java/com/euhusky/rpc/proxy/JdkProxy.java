@@ -22,8 +22,7 @@ public class JdkProxy implements IProxy,InvocationHandler{
 	}
 	
 	@Override
-	public Object createProxy(Class<?> interfaceClas, List<URL> urls) {
-		this.urls=urls;
+	public Object createProxy(Class<?> interfaceClas) {
 		return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class<?>[]{interfaceClas}, this);
 	}
 

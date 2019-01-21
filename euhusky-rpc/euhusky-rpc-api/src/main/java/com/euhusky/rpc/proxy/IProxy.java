@@ -5,6 +5,6 @@ import java.util.List;
 import com.euhusky.common.URL;
 
 public interface IProxy {
-	public Object createProxy(Class<?> interfaceClas,List<URL> urls);
+	public Object createProxy(Class<?> interfaceClas);
 
 }

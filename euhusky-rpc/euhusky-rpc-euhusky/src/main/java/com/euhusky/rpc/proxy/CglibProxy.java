@@ -12,7 +12,7 @@ public class CglibProxy implements IProxy{
 		
 	}
 	@Override
-	public Object createProxy(Class<?> interfaceClas, List<URL> urls) {
+	public Object createProxy(Class<?> interfaceClas) {
 		// TODO Auto-generated method stub
 		return null;
 	}

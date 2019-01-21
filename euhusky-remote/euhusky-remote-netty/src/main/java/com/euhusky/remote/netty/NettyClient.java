@@ -1,5 +1,6 @@
 package com.euhusky.remote.netty;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
@@ -27,7 +28,9 @@ public class NettyClient implements Client{
 	
 	private ReentrantLock lock=new ReentrantLock(); 
 	
-	private ChannelHandler handler=new ClientHandler(lock);
+	private Condition condition=lock.newCondition();
+	
+	private ChannelHandler handler=new ClientHandler(condition);
 	
 	
 	public NettyClient() {
@@ -60,9 +63,8 @@ public class NettyClient implements Client{
 		((ClientHandler)this.handler).setRpcResponse(response);
 		channel.writeAndFlush(message);
 		try {
-			this.lock.wait();
+			this.condition.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			this.lock.unlock();
