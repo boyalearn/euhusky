@@ -17,6 +17,8 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.InjectionMetadata;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -192,8 +194,9 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
         if (referenceBean == null) {
         	referenceBean=new ReferenceBean();
-        	//应用对象如果是接口默认实现为远程代理模式
-        	//否则找到本地引用对象
+        	if(ApplicationContextAware.class.isAssignableFrom(referenceBean.getClass())){
+        		referenceBean.setApplicationContext(context);
+        	}
         	if(referenceClass.isInterface()){
         		referenceBean.setRefClass(referenceClass);
         	}else{

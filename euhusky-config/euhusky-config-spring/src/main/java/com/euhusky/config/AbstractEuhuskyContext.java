@@ -2,7 +2,7 @@ package com.euhusky.config;
 
 import com.euhusky.register.Register;
 import com.euhusky.remote.transport.Client;
-import com.euhusky.remote.transport.Server;
+import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
 public class AbstractEuhuskyContext implements EuhuskyContext{
@@ -11,7 +11,7 @@ public class AbstractEuhuskyContext implements EuhuskyContext{
 	
 	protected Client client;
 	
-	protected Server server;
+	protected ServiceServer server;
 	
 	protected ProxyFactory proxyFactory;
 
@@ -31,11 +31,11 @@ public class AbstractEuhuskyContext implements EuhuskyContext{
 		this.client = client;
 	}
 
-	public Server getServer() {
+	public ServiceServer getServer() {
 		return server;
 	}
 
-	public void setServer(Server server) {
+	public void setServer(ServiceServer server) {
 		this.server = server;
 	}
 

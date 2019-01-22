@@ -22,6 +22,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>euhusky-remote-netty</name>
+			<type>2</type>
+			<location>F:/Eclipse1.8/Euhusky/euhusky/euhusky-remote/euhusky-remote-netty/src/main/java</location>
+		</link>
+		<link>
 			<name>java</name>
 			<type>2</type>
 			<location>F:/Eclipse1.8/Euhusky/euhusky/euhusky-rpc/euhusky-rpc-euhusky/src/main/java</location>

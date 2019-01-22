@@ -22,11 +22,6 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	
 	private Object invoke;
 	
-	private List<URL> urls;
-	
-	@Autowired
-	private Register register;
-	
 	private Class<?> refClass;
 	
 	private ProxyFactory proxyFactory;
@@ -37,10 +32,7 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	public Object getObject() throws Exception {
 		URL url=new URL();
 		url.setServiceName(refClass.getName());
-		if(null==proxyFactory){
-			proxyFactory=(ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
-		}
-		return proxyFactory.getProxy(refClass).createProxy(refClass);
+		return proxyFactory.getProxy(refClass).createProxy(refClass,applicationContext);
 	}
 
 	@Override
@@ -67,7 +59,7 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext=applicationContext;
-		this.register=this.applicationContext.getBean(Register.class);
+		this.proxyFactory=(ProxyFactory)applicationContext.getBean(ProxyFactory.class);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 package com.euhusky.remote.transport;
 
-public interface Server {
+public interface ServiceServer {
 	public void start();
 }

@@ -1,9 +1,8 @@
 package com.euhusky.rpc.proxy;
 
-import java.util.List;
 
+import org.springframework.context.ApplicationContext;
 
-import com.euhusky.common.URL;
 import com.euhusky.config.EuhuskyContext;
 
 public class CglibProxy implements IProxy{
@@ -12,7 +11,7 @@ public class CglibProxy implements IProxy{
 		
 	}
 	@Override
-	public Object createProxy(Class<?> interfaceClas) {
+	public Object createProxy(Class<?> refClass, ApplicationContext applicationContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}

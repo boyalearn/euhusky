@@ -17,6 +17,8 @@ import com.euhusky.common.util.JavaSPIUtil;
 import com.euhusky.common.util.NetWorkUtil;
 import com.euhusky.config.properties.ApplicationProperties;
 import com.euhusky.register.Register;
+import com.euhusky.remote.transport.Client;
+import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
 @Configuration
@@ -54,7 +56,17 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		((AbstractEuhuskyContext)euhuskyContext).setProxyFactory(proxyFactory);
 		return proxyFactory;
 	}
+	@Bean
+	public Client getClient() {
+		Client client= (Client)JavaSPIUtil.getImpl(Client.class);
+		return client;
+	}
 	
+	@Bean
+	public ServiceServer getServer() {
+		ServiceServer server= (ServiceServer)JavaSPIUtil.getImpl(ServiceServer.class);
+		return server;
+	}
 	@Override
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
 		this.context=context;
@@ -68,6 +80,8 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 			ServiceBean serviceBean=(ServiceBean)context.getBean(serviceName);
 			registerService(serviceBean);
 		}
+		ServiceServer server=(ServiceServer)context.getBean(ServiceServer.class);
+		server.start();
 		
 	}
 	

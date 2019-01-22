@@ -26,6 +26,9 @@ public class NettyClient implements Client{
 	
 	private Channel channel;
 	
+	
+	private boolean isConnect;
+	
 	private ReentrantLock lock=new ReentrantLock(); 
 	
 	private Condition condition=lock.newCondition();
@@ -43,10 +46,13 @@ public class NettyClient implements Client{
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception {
 				channel.pipeline().addLast(handler);
-				
 			}
 			
 		});
+	}
+	
+	public void connect(){
+		isConnect=true;
 		try {
 			ChannelFuture f = boot.connect("127.0.0.1", 5656).sync();
 			channel=f.channel();
@@ -56,6 +62,12 @@ public class NettyClient implements Client{
 		}
 	}
 	
+	
+	
+	public boolean isConnect() {
+		return isConnect;
+	}
+
 	@Override
 	public Object send(Object message) {
 		RpcResponse response=new RpcResponse();

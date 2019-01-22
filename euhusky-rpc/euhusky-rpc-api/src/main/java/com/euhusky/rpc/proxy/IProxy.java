@@ -1,10 +1,10 @@
 package com.euhusky.rpc.proxy;
 
-import java.util.List;
 
-import com.euhusky.common.URL;
+import org.springframework.context.ApplicationContext;
+
 
 public interface IProxy {
-	public Object createProxy(Class<?> interfaceClas);
+	public Object createProxy(Class<?> refClass, ApplicationContext applicationContext);
 
 }

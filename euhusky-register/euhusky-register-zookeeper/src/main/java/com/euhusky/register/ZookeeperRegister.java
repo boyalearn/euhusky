@@ -23,6 +23,9 @@ public class ZookeeperRegister implements Register{
 	@Override
 	public void register(URL url) {
 		ZkClient client=getZkClient();
+		if(!client.exists("/provider/"+url.getServiceName())){
+			client.createPersistent("/provider/"+url.getServiceName(), true);
+		}
 		client.createEphemeral("/provider/"+url.getServiceName()+"/"+url.getHost()+":"+url.getPort());
 	}
 

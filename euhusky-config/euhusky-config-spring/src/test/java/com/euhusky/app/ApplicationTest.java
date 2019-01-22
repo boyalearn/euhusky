@@ -15,5 +15,11 @@ public class ApplicationTest {
 		ApplicationContext context=application.run(args);
 		HelloService service=context.getBean(HelloService.class);
 		service.doTest();
+		try {
+			Thread.sleep(Integer.MAX_VALUE);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
