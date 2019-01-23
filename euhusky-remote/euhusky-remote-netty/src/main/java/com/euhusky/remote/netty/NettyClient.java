@@ -4,6 +4,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
+import com.euhusky.remote.netty.channel.ServerHandler;
+import com.euhusky.remote.netty.util.IOCoordinatorUtil;
 import com.euhusky.remote.transport.Client;
 import com.euhusky.rpc.context.RpcResponse;
 
@@ -17,6 +19,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 
 public class NettyClient implements Client{
 	
@@ -45,6 +49,9 @@ public class NettyClient implements Client{
 
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception {
+				//channel.pipeline().addLast(new LineBasedFrameDecoder(1024));
+				channel.pipeline().addLast("decoder", new StringDecoder());
+				channel.pipeline().addLast("encoder", new StringEncoder());
 				channel.pipeline().addLast(handler);
 			}
 			
@@ -71,17 +78,10 @@ public class NettyClient implements Client{
 	@Override
 	public Object send(Object message) {
 		RpcResponse response=new RpcResponse();
-		this.lock.lock();
-		((ClientHandler)this.handler).setRpcResponse(response);
-		channel.writeAndFlush(message);
-		try {
-			this.condition.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}finally {
-			this.lock.unlock();
-		}
-		return response;
+		response.setReponseId("2222222");
+		channel.writeAndFlush("dfsdfsdfsdf");
+		IOCoordinatorUtil.addWait(response);
+		return response.getMsg();
 	}
 
 

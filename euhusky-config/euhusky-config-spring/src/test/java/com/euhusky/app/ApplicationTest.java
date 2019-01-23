@@ -14,7 +14,10 @@ public class ApplicationTest {
 		SpringApplication application=new SpringApplication(ApplicationTest.class);
 		ApplicationContext context=application.run(args);
 		HelloService service=context.getBean(HelloService.class);
-		service.doTest();
+		
+		new Thread(()->{
+			service.doTest();
+		}).start();
 		try {
 			Thread.sleep(Integer.MAX_VALUE);
 		} catch (InterruptedException e) {

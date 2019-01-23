@@ -2,6 +2,7 @@ package com.euhusky.remote.netty.channel;
 
 import java.util.concurrent.locks.Condition;
 
+import com.euhusky.remote.netty.util.IOCoordinatorUtil;
 import com.euhusky.rpc.context.RpcResponse;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -11,16 +12,16 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 	
 	private Condition condition;
 	
-	private RpcResponse rpcResponse;
-	
 	public ClientHandler(Condition condition) {
 		this.condition=condition;
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		this.rpcResponse.setMsg(msg);
-		this.condition.signal();
+		System.out.println("msg:"+msg);
+		RpcResponse reponse=(RpcResponse)IOCoordinatorUtil.getWait("2222222");
+		reponse.setMsg(msg);
+		IOCoordinatorUtil.wakeUp(reponse);
 	}
 
 	@Override
@@ -34,14 +35,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		super.channelRegistered(ctx);
 	}
 
-	public RpcResponse getRpcResponse() {
-		return rpcResponse;
-	}
-
-	public void setRpcResponse(RpcResponse rpcResponse) {
-		this.rpcResponse = rpcResponse;
-	}
-	
 	
 	
 

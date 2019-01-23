@@ -26,6 +26,9 @@ public class ZookeeperRegister implements Register{
 		if(!client.exists("/provider/"+url.getServiceName())){
 			client.createPersistent("/provider/"+url.getServiceName(), true);
 		}
+		if(client.exists("/provider/"+url.getServiceName()+"/"+url.getHost()+":"+url.getPort())){
+			client.delete("/provider/"+url.getServiceName()+"/"+url.getHost()+":"+url.getPort());
+		}
 		client.createEphemeral("/provider/"+url.getServiceName()+"/"+url.getHost()+":"+url.getPort());
 	}
 

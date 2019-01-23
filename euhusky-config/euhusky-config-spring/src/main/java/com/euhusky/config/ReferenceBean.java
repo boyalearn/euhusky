@@ -1,18 +1,13 @@
 package com.euhusky.config;
 
-import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import com.euhusky.common.URL;
-import com.euhusky.common.util.JavaSPIUtil;
-import com.euhusky.register.Register;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
 @SuppressWarnings("rawtypes")
