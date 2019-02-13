@@ -20,5 +20,9 @@ public class SimpleProxyFactory implements ProxyFactory{
 			return new CglibProxy(client).createProxy(cls);
 		}
 	}
+	@Override
+	public void setClient(Client client) {
+		this.client=client;
+	}
 	
 }

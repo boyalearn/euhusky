@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-config-api</artifactId>
+			<artifactId>euhusky-remote-api</artifactId>
 			<version>${euhusky.version}</version>
 		</dependency>
 
