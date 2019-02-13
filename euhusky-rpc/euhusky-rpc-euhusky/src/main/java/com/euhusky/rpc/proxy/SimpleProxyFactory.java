@@ -1,23 +1,24 @@
 package com.euhusky.rpc.proxy;
 
-import com.euhusky.config.EuhuskyContext;
+import com.euhusky.remote.transport.Client;
 
 public class SimpleProxyFactory implements ProxyFactory{
 	
-	private EuhuskyContext euhuskyContext;
+	private Client client;
+	
+	public SimpleProxyFactory(){
+	}
+	public SimpleProxyFactory(Client client){
+		this.client=client;
+	}
 
 	@Override
-	public IProxy getProxy(Class<?> interfaceClass) {
-		if(interfaceClass.isInterface()){
-			return new JdkProxy(euhuskyContext);
+	public Object createProxy(Class<?> cls) {
+		if(cls.isInterface()){
+			return new JdkProxy(client).createProxy(cls);
 		}else{
-			return new CglibProxy(euhuskyContext);
+			return new CglibProxy(client).createProxy(cls);
 		}
 	}
-
-	@Override
-	public void setEuhuskyContext(EuhuskyContext euhuskyContext) {
-		this.euhuskyContext=euhuskyContext;
-	}
-
+	
 }

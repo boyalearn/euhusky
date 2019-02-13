@@ -13,7 +13,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -32,7 +31,6 @@ public class NettyServer implements ServiceServer{
 		boot.option(ChannelOption.TCP_NODELAY, true);
 		boot.childHandler(new ChannelInitializer<SocketChannel>() {
 			protected void initChannel(SocketChannel ch) throws Exception {
-				//ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
 				ch.pipeline().addLast("decoder", new StringDecoder());
 				ch.pipeline().addLast("encoder", new StringEncoder());
 				ch.pipeline().addLast(new ServerHandler());
@@ -47,7 +45,6 @@ public class NettyServer implements ServiceServer{
 			@SuppressWarnings("unused")
 			ChannelFuture f = boot.bind(new InetSocketAddress(5656)).sync();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -4,11 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
-import com.euhusky.remote.netty.channel.ServerHandler;
-import com.euhusky.remote.netty.util.IOCoordinatorUtil;
 import com.euhusky.remote.transport.Client;
-import com.euhusky.rpc.context.RpcResponse;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -49,7 +45,6 @@ public class NettyClient implements Client{
 
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception {
-				//channel.pipeline().addLast(new LineBasedFrameDecoder(1024));
 				channel.pipeline().addLast("decoder", new StringDecoder());
 				channel.pipeline().addLast("encoder", new StringEncoder());
 				channel.pipeline().addLast(handler);
@@ -77,11 +72,9 @@ public class NettyClient implements Client{
 
 	@Override
 	public Object send(Object message) {
-		RpcResponse response=new RpcResponse();
-		response.setReponseId("2222222");
-		channel.writeAndFlush("dfsdfsdfsdf");
-		IOCoordinatorUtil.addWait(response);
-		return response.getMsg();
+		channel.writeAndFlush(message);
+		//IOCoordinatorUtil.addWait(response);
+		return null;
 	}
 
 

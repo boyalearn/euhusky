@@ -52,7 +52,6 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	@Bean
 	public ProxyFactory getProxyFactory() {
 		ProxyFactory proxyFactory=(ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
-		proxyFactory.setEuhuskyContext(euhuskyContext);
 		((AbstractEuhuskyContext)euhuskyContext).setProxyFactory(proxyFactory);
 		return proxyFactory;
 	}

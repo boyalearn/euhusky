@@ -4,28 +4,22 @@ package com.euhusky.rpc.proxy;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import org.springframework.context.ApplicationContext;
-
-import com.euhusky.config.EuhuskyContext;
-import com.euhusky.remote.netty.NettyClient;
 import com.euhusky.remote.transport.Client;
 import com.euhusky.rpc.context.RpcRequest;
-
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-public class CglibProxy implements IProxy, MethodInterceptor{
+public class CglibProxy implements MethodInterceptor{
 	
-	private ApplicationContext applicationContext;
-
-	public CglibProxy(EuhuskyContext euhuskyContext) {
-		
+	private Client client;
+	
+	public CglibProxy(Client client){
+		this.client=client;
 	}
-	@Override
-	public Object createProxy(Class<?> refClass, ApplicationContext applicationContext) {
-		this.applicationContext=applicationContext;
+	
+	public Object createProxy(Class<?> refClass) {
 		Enhancer eh = new Enhancer();
 		eh.setSuperclass(refClass);
 		eh.setCallbacks(new Callback[]{ this });
@@ -36,10 +30,7 @@ public class CglibProxy implements IProxy, MethodInterceptor{
 		RpcRequest request=new RpcRequest();
 		request.setRequestId(UUID.randomUUID().toString());
 		request.setMethodName(method.getName());
-		NettyClient client=(NettyClient)((ApplicationContext)this.applicationContext).getBean(Client.class);
-		if(!client.isConnect()){
-			client.connect();
-		}
+		
 		Object result=client.send(request);
 		return result;
 	}

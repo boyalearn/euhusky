@@ -48,33 +48,15 @@
 			<artifactId>euhusky-remote-api</artifactId>
 			<version>${euhusky.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-remote-netty</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-rpc-euhusky</artifactId>
+			<version>${euhusky.version}</version>
+		</dependency>
 	</dependencies>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<module.a.src>F:\Eclipse1.8\Euhusky\euhusky\euhusky-rpc\euhusky-rpc-euhusky\src\main\java</module.a.src>
-		<module.b.src>F:\Eclipse1.8\Euhusky\euhusky\euhusky-config\euhusky-config-spring\src\main\java</module.b.src>
-	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${module.a.src}</source>
-								<source>${module.b.src}</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

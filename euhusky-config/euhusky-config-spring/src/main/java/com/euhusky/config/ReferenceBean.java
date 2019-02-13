@@ -27,7 +27,7 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	public Object getObject() throws Exception {
 		URL url=new URL();
 		url.setServiceName(refClass.getName());
-		return proxyFactory.getProxy(refClass).createProxy(refClass,applicationContext);
+		return proxyFactory.createProxy(refClass);
 	}
 
 	@Override
