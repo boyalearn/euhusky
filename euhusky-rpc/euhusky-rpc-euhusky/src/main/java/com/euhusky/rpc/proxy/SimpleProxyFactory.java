@@ -1,14 +1,14 @@
 package com.euhusky.rpc.proxy;
 
-import com.euhusky.remote.transport.Client;
+import com.euhusky.remote.transport.RequetClient;
 
 public class SimpleProxyFactory implements ProxyFactory{
 	
-	private Client client;
+	private RequetClient client;
 	
 	public SimpleProxyFactory(){
 	}
-	public SimpleProxyFactory(Client client){
+	public SimpleProxyFactory(RequetClient client){
 		this.client=client;
 	}
 
@@ -21,7 +21,7 @@ public class SimpleProxyFactory implements ProxyFactory{
 		}
 	}
 	@Override
-	public void setClient(Client client) {
+	public void setClient(RequetClient client) {
 		this.client=client;
 	}
 	

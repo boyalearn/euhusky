@@ -40,10 +40,10 @@ public class NettyServer implements ServiceServer{
 	}
 
 	@Override
-	public void start() {
+	public void start(int PORT) {
 		try {
 			@SuppressWarnings("unused")
-			ChannelFuture f = boot.bind(new InetSocketAddress(5656)).sync();
+			ChannelFuture f = boot.bind(new InetSocketAddress(PORT)).sync();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

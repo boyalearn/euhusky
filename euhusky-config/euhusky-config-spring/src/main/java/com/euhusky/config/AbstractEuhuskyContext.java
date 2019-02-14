@@ -1,7 +1,7 @@
 package com.euhusky.config;
 
 import com.euhusky.register.Register;
-import com.euhusky.remote.transport.Client;
+import com.euhusky.remote.transport.RequetClient;
 import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
@@ -9,7 +9,7 @@ public class AbstractEuhuskyContext implements EuhuskyContext{
 	
 	protected Register registry;
 	
-	protected Client client;
+	protected RequetClient client;
 	
 	protected ServiceServer server;
 	
@@ -23,11 +23,11 @@ public class AbstractEuhuskyContext implements EuhuskyContext{
 		this.registry = registry;
 	}
 
-	public Client getClient() {
+	public RequetClient getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(RequetClient client) {
 		this.client = client;
 	}
 

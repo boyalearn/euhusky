@@ -17,7 +17,7 @@ import com.euhusky.common.util.JavaSPIUtil;
 import com.euhusky.common.util.NetWorkUtil;
 import com.euhusky.config.properties.ApplicationProperties;
 import com.euhusky.register.Register;
-import com.euhusky.remote.transport.Client;
+import com.euhusky.remote.transport.RequetClient;
 import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
@@ -56,8 +56,8 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		return proxyFactory;
 	}
 	@Bean
-	public Client getClient() {
-		Client client= (Client)JavaSPIUtil.getImpl(Client.class);
+	public RequetClient getClient() {
+		RequetClient client= (RequetClient)JavaSPIUtil.getImpl(RequetClient.class);
 		return client;
 	}
 	
@@ -80,7 +80,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 			registerService(serviceBean);
 		}
 		ServiceServer server=(ServiceServer)context.getBean(ServiceServer.class);
-		server.start();
+		server.start(5656);
 		
 	}
 	

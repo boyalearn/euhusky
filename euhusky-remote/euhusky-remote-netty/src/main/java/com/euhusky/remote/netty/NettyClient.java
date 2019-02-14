@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
-import com.euhusky.remote.transport.Client;
+import com.euhusky.remote.transport.RequetClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -18,7 +18,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
-public class NettyClient implements Client{
+public class NettyClient implements RequetClient{
 	
 	private Bootstrap boot;
 	
