@@ -1,5 +1,6 @@
 package com.euhusky.remote.netty;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
@@ -34,6 +35,8 @@ public class NettyClient implements RequetClient{
 	
 	private AtomicInteger seq=new AtomicInteger(0);
 	
+	private final CountDownLatch cdl = new CountDownLatch(1);
+	
 	
 	private boolean isConnect;
 	
@@ -62,6 +65,7 @@ public class NettyClient implements RequetClient{
 		try {
 			ChannelFuture f = boot.connect("127.0.0.1", 5656).sync();
 			channel=f.channel();
+			cdl.countDown();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,12 +80,23 @@ public class NettyClient implements RequetClient{
 
 	@Override
 	public Object send(Object message) {
+		if(!isConnect()) {
+			
+			connect();
+			try {
+				cdl.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		int currId=this.seq.incrementAndGet();
 		DataWrap warp=new DataWrap();
 		warp.setData(message);
 		warp.setDataId(currId);
 		IOCoordinatorUtil.add(warp);
 		channel.writeAndFlush(serialutil.serialize(warp));
+		System.out.println("wait");
 		IOCoordinatorUtil.wait(warp);
 		return warp.getData();
 	}

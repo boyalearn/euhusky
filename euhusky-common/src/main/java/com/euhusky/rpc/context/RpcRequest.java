@@ -1,6 +1,11 @@
 package com.euhusky.rpc.context;
 
-public class RpcRequest {
+import java.io.Serializable;
+
+public class RpcRequest implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	private String requestId;
 	
 	private String methodName;

@@ -20,6 +20,7 @@ import com.euhusky.register.Register;
 import com.euhusky.remote.transport.RequetClient;
 import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
+import com.euhusky.rpc.proxy.SimpleProxyFactory;
 
 @Configuration
 @ConditionalOnClass(ApplicationConfig.class)
@@ -51,8 +52,9 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	
 	@Bean
 	public ProxyFactory getProxyFactory() {
-		ProxyFactory proxyFactory=(ProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
-		((AbstractEuhuskyContext)euhuskyContext).setProxyFactory(proxyFactory);
+		SimpleProxyFactory proxyFactory=(SimpleProxyFactory)JavaSPIUtil.getImpl(ProxyFactory.class);
+		RequetClient client= (RequetClient)JavaSPIUtil.getImpl(RequetClient.class);
+		proxyFactory.setClient(client);
 		return proxyFactory;
 	}
 	@Bean

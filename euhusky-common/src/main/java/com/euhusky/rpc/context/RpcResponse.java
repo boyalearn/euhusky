@@ -1,7 +1,14 @@
 package com.euhusky.rpc.context;
 
-public class RpcResponse {
+import java.io.Serializable;
+
+public class RpcResponse implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String reponseId;
 	
 	private Object msg;

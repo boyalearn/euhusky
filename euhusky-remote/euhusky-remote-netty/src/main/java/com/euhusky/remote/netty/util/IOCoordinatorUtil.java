@@ -1,7 +1,6 @@
 package com.euhusky.remote.netty.util;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.euhusky.remote.netty.channel.DataWrap;
 
