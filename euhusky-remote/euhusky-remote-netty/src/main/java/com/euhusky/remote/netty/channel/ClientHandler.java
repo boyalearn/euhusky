@@ -20,8 +20,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		System.out.println(data);
 		DataWrap result=(DataWrap)IOCoordinatorUtil.get(data.getDataId());
 		result.setData(data.getData());
-		System.out.println("wakeUp");
-		IOCoordinatorUtil.wakeUp(result);
+		result.cutdown();
 		
 	}
 

@@ -96,8 +96,7 @@ public class NettyClient implements RequetClient{
 		warp.setDataId(currId);
 		IOCoordinatorUtil.add(warp);
 		channel.writeAndFlush(serialutil.serialize(warp));
-		System.out.println("wait");
-		IOCoordinatorUtil.wait(warp);
+		warp.await();
 		return warp.getData();
 	}
 

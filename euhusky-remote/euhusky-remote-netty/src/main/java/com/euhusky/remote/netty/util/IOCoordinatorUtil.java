@@ -1,12 +1,13 @@
 package com.euhusky.remote.netty.util;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.euhusky.remote.netty.channel.DataWrap;
 
 public class IOCoordinatorUtil {
 	
-	private static final HashMap<Integer,Object> queue=new HashMap<Integer,Object>();
+	private static final ConcurrentHashMap<Integer,Object> queue=new ConcurrentHashMap<Integer,Object>();
 	
 	public static void add(DataWrap warp) {
 		queue.put(warp.getDataId(), warp);

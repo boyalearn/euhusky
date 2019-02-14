@@ -32,6 +32,7 @@ public class CglibProxy implements MethodInterceptor{
 		request.setMethodName(method.getName());
 		
 		Object result=client.send(request);
+		System.out.println(result);
 		return result;
 	}
 
