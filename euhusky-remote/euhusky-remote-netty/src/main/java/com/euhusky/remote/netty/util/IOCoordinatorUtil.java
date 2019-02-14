@@ -1,30 +1,34 @@
 package com.euhusky.remote.netty.util;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.euhusky.rpc.context.RpcResponse;
+import com.euhusky.remote.netty.channel.DataWrap;
 
 public class IOCoordinatorUtil {
 	
-	private static final ConcurrentHashMap<String,Object> queue=new ConcurrentHashMap<String,Object>();
+	private static final HashMap<Integer,Object> queue=new HashMap<Integer,Object>();
 	
-	public static void addWait(RpcResponse response){
-		synchronized(response){
-		   queue.put(response.getReponseId(), response);
+	public static void add(DataWrap warp) {
+		queue.put(warp.getDataId(), warp);
+	}
+	
+	public static void wait(DataWrap warp){
+		synchronized(warp){
 		   try {
-			   response.wait();
+			   warp.wait();
 		   } catch (InterruptedException e) {
 			   e.printStackTrace();
 		   }
 		}
 	}
-	
-	public static Object getWait(String responseId){
-		return queue.get(responseId);
+	public static Object get(Integer dataId){
+		Object data=queue.get(dataId);
+		return data;
 	}
-	public static void wakeUp(RpcResponse response){
-		synchronized(response){
-		   response.notify();
+	public static void wakeUp(DataWrap warp){
+		synchronized(warp){
+			warp.notify();
 		}
 	}
 

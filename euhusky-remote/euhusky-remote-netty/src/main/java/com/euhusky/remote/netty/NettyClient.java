@@ -1,22 +1,26 @@
 package com.euhusky.remote.netty;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.euhusky.remote.netty.channel.ClientHandler;
+import com.euhusky.remote.netty.channel.DataWrap;
+import com.euhusky.remote.netty.docde.MessageDecode;
+import com.euhusky.remote.netty.docde.MessageEncode;
+import com.euhusky.remote.netty.util.IOCoordinatorUtil;
 import com.euhusky.remote.transport.RequetClient;
+import com.euhusky.serialization.DefaultSerializable;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
 public class NettyClient implements RequetClient{
 	
@@ -24,16 +28,14 @@ public class NettyClient implements RequetClient{
 	
 	private EventLoopGroup work;
 	
+	private DefaultSerializable  serialutil=new DefaultSerializable();
+	
 	private Channel channel;
+	
+	private AtomicInteger seq=new AtomicInteger(0);
 	
 	
 	private boolean isConnect;
-	
-	private ReentrantLock lock=new ReentrantLock(); 
-	
-	private Condition condition=lock.newCondition();
-	
-	private ChannelHandler handler=new ClientHandler(condition);
 	
 	
 	public NettyClient() {
@@ -45,9 +47,11 @@ public class NettyClient implements RequetClient{
 
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception {
-				channel.pipeline().addLast("decoder", new StringDecoder());
-				channel.pipeline().addLast("encoder", new StringEncoder());
-				channel.pipeline().addLast(handler);
+				channel.pipeline().addLast("decoder", new MessageDecode());
+				channel.pipeline().addLast("decoder2", new ByteArrayDecoder());
+				channel.pipeline().addLast("encoder2", new ByteArrayEncoder());
+				channel.pipeline().addLast("encoder", new MessageEncode());
+				channel.pipeline().addLast(new ClientHandler());
 			}
 			
 		});
@@ -72,9 +76,14 @@ public class NettyClient implements RequetClient{
 
 	@Override
 	public Object send(Object message) {
-		channel.writeAndFlush(message);
-		//IOCoordinatorUtil.addWait(response);
-		return null;
+		int currId=this.seq.incrementAndGet();
+		DataWrap warp=new DataWrap();
+		warp.setData(message);
+		warp.setDataId(currId);
+		IOCoordinatorUtil.add(warp);
+		channel.writeAndFlush(serialutil.serialize(warp));
+		IOCoordinatorUtil.wait(warp);
+		return warp.getData();
 	}
 
 
