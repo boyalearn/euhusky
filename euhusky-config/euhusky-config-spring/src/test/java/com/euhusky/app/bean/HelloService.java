@@ -14,4 +14,8 @@ public class HelloService {
 		demoService.say();
 	}
 	
+	public String doTest2(String content){
+		return demoService.say(content);
+	}
+	
 }

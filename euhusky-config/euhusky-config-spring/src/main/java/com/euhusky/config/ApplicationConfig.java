@@ -1,8 +1,8 @@
 package com.euhusky.config;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,13 +21,14 @@ import com.euhusky.remote.transport.RequetClient;
 import com.euhusky.remote.transport.ServiceServer;
 import com.euhusky.rpc.proxy.ProxyFactory;
 import com.euhusky.rpc.proxy.SimpleProxyFactory;
+import com.euhusky.rpc.server.ServerHandler;
 
 @Configuration
 @ConditionalOnClass(ApplicationConfig.class)
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationConfig implements Application,ApplicationContextAware,SmartLifecycle{
 	
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private ApplicationContext context;
 	
@@ -82,7 +83,8 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 			registerService(serviceBean);
 		}
 		ServiceServer server=(ServiceServer)context.getBean(ServiceServer.class);
-		server.start(5656);
+		server.setHandler(new ServerHandler());
+		server.start(Integer.valueOf(applicationProperties.getServerPort()));
 		
 	}
 	

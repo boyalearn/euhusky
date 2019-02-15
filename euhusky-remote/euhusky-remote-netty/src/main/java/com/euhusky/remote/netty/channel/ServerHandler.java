@@ -19,6 +19,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 	} 
 	public void exceptionCaught(ChannelHandlerContext ctx,Throwable cause) { 
 		cause.printStackTrace();
+		logger.info(cause.getLocalizedMessage());
 		ctx.close();
 	} 
 }

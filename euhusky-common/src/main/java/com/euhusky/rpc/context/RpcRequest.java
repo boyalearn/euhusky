@@ -1,6 +1,7 @@
 package com.euhusky.rpc.context;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class RpcRequest implements Serializable{
 
@@ -9,6 +10,10 @@ public class RpcRequest implements Serializable{
 	private String requestId;
 	
 	private String methodName;
+	
+	private String[] paramTypes;
+	
+	private String className;
 	
 	private Object[] args;
 
@@ -28,6 +33,22 @@ public class RpcRequest implements Serializable{
 		this.methodName = methodName;
 	}
 
+	public String[] getParamTypes() {
+		return paramTypes;
+	}
+
+	public void setParamTypes(String[] paramTypes) {
+		this.paramTypes = paramTypes;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
 	public Object[] getArgs() {
 		return args;
 	}
@@ -35,7 +56,13 @@ public class RpcRequest implements Serializable{
 	public void setArgs(Object[] args) {
 		this.args = args;
 	}
+
+	@Override
+	public String toString() {
+		return "RpcRequest [requestId=" + requestId + ", methodName=" + methodName + ", paramTypes="
+				+ Arrays.toString(paramTypes) + ", className=" + className + ", args=" + Arrays.toString(args) + "]";
+	}
+
 	
-	
-	
+
 }

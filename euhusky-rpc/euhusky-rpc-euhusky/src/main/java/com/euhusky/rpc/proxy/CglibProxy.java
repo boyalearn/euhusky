@@ -30,9 +30,15 @@ public class CglibProxy implements MethodInterceptor{
 		RpcRequest request=new RpcRequest();
 		request.setRequestId(UUID.randomUUID().toString());
 		request.setMethodName(method.getName());
-		
+		request.setClassName(bean.getClass().getSuperclass().getName());
+		Class<?>[] paramTypeClss=method.getParameterTypes();
+		String[] argTypes=new String[paramTypeClss.length];
+		for(int i=0;i<paramTypeClss.length;i++) {
+			argTypes[i]=paramTypeClss[i].getTypeName();
+		}
+		request.setParamTypes(argTypes);
+		request.setArgs(args);
 		Object result=client.send(request);
-		System.out.println(result);
 		return result;
 	}
 

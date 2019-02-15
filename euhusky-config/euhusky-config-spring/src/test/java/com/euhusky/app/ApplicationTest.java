@@ -16,7 +16,7 @@ public class ApplicationTest {
 		HelloService service=context.getBean(HelloService.class);
 		
 		new Thread(()->{
-			service.doTest();
+			System.out.println("client:"+service.doTest2("我是小XX"));
 		}).start();
 		try {
 			Thread.sleep(Integer.MAX_VALUE);

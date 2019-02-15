@@ -1,14 +1,12 @@
 package com.euhusky.remote.netty;
 
 import java.net.InetSocketAddress;
-
-import com.euhusky.remote.netty.channel.ServerHandler;
 import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
 import com.euhusky.remote.transport.ServiceServer;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -26,8 +24,22 @@ public class NettyServer implements ServiceServer{
 	
 	private EventLoopGroup work=new NioEventLoopGroup();
 	
+	private ChannelHandler handler;
 	
-	public NettyServer() {
+	
+	public NettyServer() { 
+	}
+	
+	public NettyServer(ChannelHandler handler) { 
+		this.handler=handler;
+	}
+
+	public void setHandler(ChannelHandler handler) {
+		this.handler=handler;
+	}
+	
+	@Override
+	public void start(int PORT) {
 		boot.group(boss,work);
 		boot.channel(NioServerSocketChannel.class);
 		boot.option(ChannelOption.TCP_NODELAY, true);
@@ -37,14 +49,9 @@ public class NettyServer implements ServiceServer{
 				channel.pipeline().addLast("decoder2", new ByteArrayDecoder());
 				channel.pipeline().addLast("encoder2", new ByteArrayEncoder());
 				channel.pipeline().addLast("encoder", new MessageEncode());
-				channel.pipeline().addLast(new ServerHandler());
+				channel.pipeline().addLast("handler", handler);
 			}
 		});
-        
-	}
-
-	@Override
-	public void start(int PORT) {
 		try {
 			@SuppressWarnings("unused")
 			ChannelFuture f = boot.bind(new InetSocketAddress(PORT)).sync();

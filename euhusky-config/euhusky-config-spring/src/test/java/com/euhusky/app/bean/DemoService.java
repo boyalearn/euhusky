@@ -7,4 +7,8 @@ public class DemoService {
 	public void say(){
 		System.out.println("sdfsdfsd");
 	}
+	
+	public String say(String content){
+		return "server"+content;
+	}
 }
