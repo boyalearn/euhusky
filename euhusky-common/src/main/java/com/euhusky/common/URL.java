@@ -1,12 +1,19 @@
 package com.euhusky.common;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class URL implements Serializable{
 	
 	private static final long serialVersionUID = -5556351328728596310L;
 
 	private String serviceName;
+	
+	private String methodName;
+	
+	private String[] paramTypes;
+	
+	private Object[] params;
 	
 	private String host;
 	
@@ -18,6 +25,30 @@ public class URL implements Serializable{
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	public String[] getParamTypes() {
+		return paramTypes;
+	}
+
+	public void setParamTypes(String[] paramTypes) {
+		this.paramTypes = paramTypes;
+	}
+
+	public Object[] getParams() {
+		return params;
+	}
+
+	public void setParams(Object[] params) {
+		this.params = params;
 	}
 
 	public String getHost() {
@@ -35,6 +66,12 @@ public class URL implements Serializable{
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "URL [serviceName=" + serviceName + ", methodName=" + methodName + ", paramTypes="
+				+ Arrays.toString(paramTypes) + ", params=" + Arrays.toString(params) + ", host=" + host + ", port="
+				+ port + "]";
+	}
+
 }

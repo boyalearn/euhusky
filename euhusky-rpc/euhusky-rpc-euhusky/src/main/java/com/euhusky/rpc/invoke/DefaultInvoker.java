@@ -1,14 +1,13 @@
 package com.euhusky.rpc.invoke;
 
 import java.lang.reflect.Method;
-
-import com.euhusky.rpc.context.RpcRequest;
+import com.euhusky.common.URL;
 
 public class DefaultInvoker {
 	
-	public Object invoke(RpcRequest requset) {
+	public Object invoke(URL requset) {
 		try {
-			Class<?> clss=Class.forName(requset.getClassName());
+			Class<?> clss=Class.forName(requset.getServiceName());
 			Object bean=clss.newInstance();
 			String[] argTypes=requset.getParamTypes();
 			Class<?>[] paramTypes=new Class<?>[argTypes.length];
@@ -17,7 +16,7 @@ public class DefaultInvoker {
 			}
 			Method method=clss.getMethod(requset.getMethodName(),paramTypes);
 			
-			return method.invoke(bean, requset.getArgs());
+			return method.invoke(bean, requset.getParams());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

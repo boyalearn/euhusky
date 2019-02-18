@@ -3,9 +3,9 @@ package com.euhusky.rpc.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.euhusky.common.URL;
 import com.euhusky.remote.netty.handler.ClientHandler;
 import com.euhusky.remote.netty.handler.DataWrap;
-import com.euhusky.rpc.context.RpcRequest;
 import com.euhusky.rpc.invoke.DefaultInvoker;
 import com.euhusky.serialization.DefaultSerializable;
 
@@ -20,7 +20,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		DataWrap data=(DataWrap)serialutil.deserialize((byte[])msg);
-		RpcRequest request=(RpcRequest)data.getData();
+		URL request=(URL)data.getData();
 		DefaultInvoker invoker=new DefaultInvoker();
 		Object obj=invoker.invoke(request);
 		data.setData(null==obj?"":obj);

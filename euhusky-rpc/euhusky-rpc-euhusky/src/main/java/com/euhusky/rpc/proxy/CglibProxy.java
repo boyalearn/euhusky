@@ -2,10 +2,8 @@ package com.euhusky.rpc.proxy;
 
 
 import java.lang.reflect.Method;
-import java.util.UUID;
-
+import com.euhusky.common.URL;
 import com.euhusky.remote.transport.RequetClient;
-import com.euhusky.rpc.context.RpcRequest;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -27,19 +25,23 @@ public class CglibProxy implements MethodInterceptor{
 	}
 	@Override
 	public Object intercept(Object bean, Method method, Object[] args, MethodProxy proxyMethod) throws Throwable {
-		RpcRequest request=new RpcRequest();
-		request.setRequestId(UUID.randomUUID().toString());
-		request.setMethodName(method.getName());
-		request.setClassName(bean.getClass().getSuperclass().getName());
+		
+		Object result=client.send(wrapUrl(bean,method,args,proxyMethod));
+		return result;
+	}
+	
+	private URL wrapUrl(Object bean, Method method, Object[] args, MethodProxy proxyMethod){
+		URL url=new URL();
+		url.setMethodName(method.getName());
+		url.setServiceName(bean.getClass().getSuperclass().getName());
 		Class<?>[] paramTypeClss=method.getParameterTypes();
 		String[] argTypes=new String[paramTypeClss.length];
 		for(int i=0;i<paramTypeClss.length;i++) {
 			argTypes[i]=paramTypeClss[i].getTypeName();
 		}
-		request.setParamTypes(argTypes);
-		request.setArgs(args);
-		Object result=client.send(request);
-		return result;
+		url.setParamTypes(argTypes);
+		url.setParams(args);
+		return url;
 	}
 
 }

@@ -40,7 +40,9 @@ public class ZookeeperRegister implements Register{
 		for(String u:list) {
 			URL l=new URL();
 			l.setServiceName(url.getServiceName());
-			l.setHost(u);
+			String[] arr=u.split("[:]");
+			l.setHost(arr[0]);
+			l.setPort(Integer.valueOf(arr[1]));
 			urls.add(l);
 		}
 		return urls;

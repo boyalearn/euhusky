@@ -1,9 +1,11 @@
 package com.euhusky.remote.netty;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.euhusky.common.URL;
+import com.euhusky.common.util.ReferenceCache;
 import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
 import com.euhusky.remote.netty.handler.ClientHandler;
@@ -36,10 +38,7 @@ public class NettyClient implements RequetClient{
 	
 	private Channel channel;
 	
-	private AtomicInteger seq=new AtomicInteger(0);
-	
-	private final CountDownLatch cdl = new CountDownLatch(1);
-	
+	private static final AtomicInteger seq=new AtomicInteger(0);
 	
 	private boolean isConnect;
 	
@@ -63,15 +62,17 @@ public class NettyClient implements RequetClient{
 		});
 	}
 	
-	public void connect(){
+	public Channel connect(URL url){
 		isConnect=true;
 		try {
-			ChannelFuture f = boot.connect("127.0.0.1", 5656).sync();
+			ChannelFuture f = boot.connect(url.getHost(), url.getPort()).sync();
 			channel=f.channel();
-			cdl.countDown();
+			NettyClient.channelMap.put(url.getHost()+":"+url.getPort(), channel);
+			return channel;
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -85,26 +86,30 @@ public class NettyClient implements RequetClient{
 		return channelMap.get(host);
 	}
 
+
 	@Override
-	public Object send(Object message) {
-		if(!isConnect()) {
-			
-			connect();
-			try {
-				cdl.await();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		int currId=this.seq.incrementAndGet();
+	public Object send(URL url) {
+		int currId=NettyClient.seq.incrementAndGet();
 		DataWrap warp=new DataWrap();
-		warp.setData(message);
+		warp.setData(url);
 		warp.setDataId(currId);
 		IOCoordinatorUtil.add(warp);
-		channel.writeAndFlush(serialutil.serialize(warp));
+		getChannel(url).writeAndFlush(serialutil.serialize(warp));
 		warp.await();
 		return warp.getData();
+	}
+	
+	public Channel getChannel(URL url){
+		List<URL> references=ReferenceCache.getReferences(url.getServiceName());
+		URL refer=references.get(0);
+		url.setHost(refer.getHost());
+		url.setPort(refer.getPort());
+		String host=refer.getHost()+":"+refer.getPort();
+		Channel channel=channelMap.get(host);
+		if(null==channel){
+			channel=connect(url);
+		}
+		return channel;
 	}
 
 

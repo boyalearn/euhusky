@@ -1,6 +1,9 @@
 package com.euhusky.config;
 
 
+import java.util.List;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -15,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import com.euhusky.common.URL;
 import com.euhusky.common.util.JavaSPIUtil;
 import com.euhusky.common.util.NetWorkUtil;
+import com.euhusky.common.util.ReferenceCache;
 import com.euhusky.config.properties.ApplicationProperties;
 import com.euhusky.register.Register;
 import com.euhusky.remote.transport.RequetClient;
@@ -34,6 +38,8 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	
 	@Autowired
 	private EuhuskyContext euhuskyContext;
+	
+	private Register register;
 
 	@Autowired
 	private ApplicationProperties applicationProperties;
@@ -43,6 +49,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		Register register= (Register)JavaSPIUtil.getImpl(Register.class);
 		register.setRegisterUrl(applicationProperties.getRegisterUrl());
 		((AbstractEuhuskyContext)euhuskyContext).setRegistry(register);
+		this.register=register;
 		return register;
 	}
 	
@@ -85,9 +92,13 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		ServiceServer server=(ServiceServer)context.getBean(ServiceServer.class);
 		server.setHandler(new ServerHandler());
 		server.start(Integer.valueOf(applicationProperties.getServerPort()));
-		
-		String[] referenceNames=context.getBeanNamesForType(ReferenceBean.class);
-		System.out.println(referenceNames);
+		Set<String> refences=ReferenceCache.getRefenece();
+		for(String refence:refences){
+			URL url=new URL();
+			url.setServiceName(refence);
+			List<URL> urls=register.subscribe(url);
+			ReferenceCache.setReferences(refence, urls);
+		}
 	}
 	
 	private void registerService(ServiceBean serviceBean){

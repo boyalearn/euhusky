@@ -1,5 +1,6 @@
 package com.euhusky.config;
 
+
 import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -7,8 +8,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import com.euhusky.common.URL;
-import com.euhusky.register.Register;
+import com.euhusky.common.util.ReferenceCache;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
 @SuppressWarnings("rawtypes")
@@ -22,14 +22,11 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	
 	private ProxyFactory proxyFactory;
 	
-	private Register register;
-	
 	private ApplicationContext applicationContext;
 
 	@Override
 	public Object getObject() throws Exception {
-		URL url=new URL();
-		url.setServiceName(refClass.getName());
+		ReferenceCache.addRefenece(refClass.getName());
 		return proxyFactory.createProxy(refClass);
 	}
 
@@ -66,14 +63,8 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 		for(ProxyFactory config:consumerConfigMap.values()){
 			this.proxyFactory=config;
 		}
-	}
+		
 
-	public Register getRegister() {
-		return register;
-	}
-
-	public void setRegister(Register register) {
-		this.register = register;
 	}
 	
 	

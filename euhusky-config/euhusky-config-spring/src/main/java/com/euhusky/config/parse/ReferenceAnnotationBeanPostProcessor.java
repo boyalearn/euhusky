@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
@@ -24,10 +23,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
 import com.euhusky.config.ReferenceBean;
 import com.euhusky.config.annotation.context.Reference;
-import com.euhusky.register.Register;
 
 import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
 
@@ -201,8 +198,6 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         		referenceBean.setRefClass(referenceClass);
         	}else{
         		if(reference.remote()){
-        			Register register=context.getBean(Register.class);
-        			referenceBean.setRegister(register);
         			referenceBean.setRefClass(referenceClass);
         		}else{
         		    return context.getBean(referenceClass);
