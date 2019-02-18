@@ -1,4 +1,4 @@
-package com.euhusky.remote.netty.channel;
+package com.euhusky.remote.netty.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

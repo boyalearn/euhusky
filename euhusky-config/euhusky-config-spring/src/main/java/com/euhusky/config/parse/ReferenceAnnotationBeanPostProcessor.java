@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import com.euhusky.config.ReferenceBean;
 import com.euhusky.config.annotation.context.Reference;
+import com.euhusky.register.Register;
 
 import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
 
@@ -34,6 +35,10 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         implements MergedBeanDefinitionPostProcessor,PriorityOrdered, ApplicationContextAware, BeanClassLoaderAware,DisposableBean{
 	
 	public static final String BEAN_NAME = "referenceAnnotationBeanPostProcessor";
+	
+	
+	@SuppressWarnings("unused")
+	private ClassLoader classLoader;
 	
 	
 	private ApplicationContext context;
@@ -49,7 +54,6 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public int getOrder() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -61,13 +65,11 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
-		// TODO Auto-generated method stub
-		
+		this.classLoader=classLoader;
 	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		// TODO Auto-generated method stub
 		this.context=applicationContext;
 	}
 	
@@ -199,6 +201,8 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         		referenceBean.setRefClass(referenceClass);
         	}else{
         		if(reference.remote()){
+        			Register register=context.getBean(Register.class);
+        			referenceBean.setRegister(register);
         			referenceBean.setRefClass(referenceClass);
         		}else{
         		    return context.getBean(referenceClass);
@@ -210,6 +214,5 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 
         return referenceBean.getObject();
     }
-	
 
 }

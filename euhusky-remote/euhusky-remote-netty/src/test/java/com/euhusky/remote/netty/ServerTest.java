@@ -1,6 +1,6 @@
 package com.euhusky.remote.netty;
 
-import com.euhusky.remote.netty.channel.ServerHandler;
+import com.euhusky.remote.netty.handler.ServerHandler;
 
 public class ServerTest {
     public static void main(String[] args){

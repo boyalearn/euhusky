@@ -3,8 +3,8 @@ package com.euhusky.rpc.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.euhusky.remote.netty.channel.ClientHandler;
-import com.euhusky.remote.netty.channel.DataWrap;
+import com.euhusky.remote.netty.handler.ClientHandler;
+import com.euhusky.remote.netty.handler.DataWrap;
 import com.euhusky.rpc.context.RpcRequest;
 import com.euhusky.rpc.invoke.DefaultInvoker;
 import com.euhusky.serialization.DefaultSerializable;

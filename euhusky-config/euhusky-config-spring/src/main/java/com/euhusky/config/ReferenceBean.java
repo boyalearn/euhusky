@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import com.euhusky.common.URL;
+import com.euhusky.register.Register;
 import com.euhusky.rpc.proxy.ProxyFactory;
 
 @SuppressWarnings("rawtypes")
@@ -20,6 +21,8 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 	private Class<?> refClass;
 	
 	private ProxyFactory proxyFactory;
+	
+	private Register register;
 	
 	private ApplicationContext applicationContext;
 
@@ -64,6 +67,16 @@ public class ReferenceBean implements Reference,FactoryBean,ApplicationContextAw
 			this.proxyFactory=config;
 		}
 	}
+
+	public Register getRegister() {
+		return register;
+	}
+
+	public void setRegister(Register register) {
+		this.register = register;
+	}
+	
+	
 	
 	
 	

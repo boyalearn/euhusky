@@ -1,4 +1,4 @@
-package com.euhusky.remote.netty.channel;
+package com.euhusky.remote.netty.handler;
 
 import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;

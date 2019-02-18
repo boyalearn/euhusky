@@ -1,7 +1,8 @@
 package com.euhusky.remote.netty.util;
 
 import java.util.concurrent.ConcurrentHashMap;
-import com.euhusky.remote.netty.channel.DataWrap;
+
+import com.euhusky.remote.netty.handler.DataWrap;
 
 public class IOCoordinatorUtil {
 	

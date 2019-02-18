@@ -76,7 +76,7 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 	
 	@Override
 	public void start() {
-		logger.info("Application start inbind :"+applicationProperties.getServerPort());
+		logger.info("Application start in bind :"+applicationProperties.getServerPort());
 		String[] serviceNames=context.getBeanNamesForType(ServiceBean.class);
 		for(String serviceName:serviceNames){
 			ServiceBean serviceBean=(ServiceBean)context.getBean(serviceName);
@@ -86,6 +86,8 @@ public class ApplicationConfig implements Application,ApplicationContextAware,Sm
 		server.setHandler(new ServerHandler());
 		server.start(Integer.valueOf(applicationProperties.getServerPort()));
 		
+		String[] referenceNames=context.getBeanNamesForType(ReferenceBean.class);
+		System.out.println(referenceNames);
 	}
 	
 	private void registerService(ServiceBean serviceBean){

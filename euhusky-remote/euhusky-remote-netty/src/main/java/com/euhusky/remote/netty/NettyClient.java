@@ -1,12 +1,13 @@
 package com.euhusky.remote.netty;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.euhusky.remote.netty.channel.ClientHandler;
-import com.euhusky.remote.netty.channel.DataWrap;
 import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
+import com.euhusky.remote.netty.handler.ClientHandler;
+import com.euhusky.remote.netty.handler.DataWrap;
 import com.euhusky.remote.netty.util.IOCoordinatorUtil;
 import com.euhusky.remote.transport.RequetClient;
 import com.euhusky.serialization.DefaultSerializable;
@@ -24,6 +25,8 @@ import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
 public class NettyClient implements RequetClient{
+	
+	private static final ConcurrentHashMap<String,Channel> channelMap=new ConcurrentHashMap<String,Channel>();
 	
 	private Bootstrap boot;
 	
@@ -76,6 +79,10 @@ public class NettyClient implements RequetClient{
 	
 	public boolean isConnect() {
 		return isConnect;
+	}
+	
+	public Channel getChannel(String host) {
+		return channelMap.get(host);
 	}
 
 	@Override

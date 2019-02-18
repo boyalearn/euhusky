@@ -184,7 +184,6 @@ public class ServiceAnnotationBeanPostProcessor
 		String beanName=buildBeanName(beanClass,service);
 		AbstractBeanDefinition serviceBeanDefinition=buildServiceBeanDefinition(service,beanClass);
 		registry.registerBeanDefinition(beanName, serviceBeanDefinition);
-		System.out.println(beanDefinitionHolder);
 
 	}
 	
