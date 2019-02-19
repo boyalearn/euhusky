@@ -47,6 +47,7 @@ public class ServiceAnnotationBeanPostProcessor
 	private ClassLoader classLoader;
 
 	private ResourceLoader resourceLoader;
+	
 
 	public ServiceAnnotationBeanPostProcessor(Collection<String> packagesToScan) {
 		this(new LinkedHashSet<String>(packagesToScan));

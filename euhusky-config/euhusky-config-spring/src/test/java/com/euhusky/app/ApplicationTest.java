@@ -16,9 +16,15 @@ public class ApplicationTest {
 		HelloService service=context.getBean(HelloService.class);
 		
 		new Thread(()->{
-			System.out.println("client:"+service.doTest2("我是小XX"));
+			//for(;;) {
+				System.out.println("client1:"+service.doTest2("我是小XX1"));
+				System.out.println("client2:"+service.doTest2("我是小XX2"));
+				System.out.println("client3:"+service.doTest2("我是小XX3"));
+				System.out.println("client4:"+service.doTest2("我是小XX4"));
+		    //}
 		}).start();
 		try {
+			System.gc();
 			Thread.sleep(Integer.MAX_VALUE);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

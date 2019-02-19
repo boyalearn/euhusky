@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -19,6 +21,11 @@ import com.euhusky.config.annotation.EuHuskyComponetScan;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 
 public class EuHuskyComponentScanRegistrar implements ImportBeanDefinitionRegistrar{
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public EuHuskyComponentScanRegistrar() {
+		logger.info(EuHuskyComponentScanRegistrar.class.getName()+" init.....");
+	}
 
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {

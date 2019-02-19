@@ -9,6 +9,9 @@ public class HelloService {
 	@Reference
 	private DemoService demoService;
 	
+	public HelloService() {
+		System.out.println(">>>>>>>>>>>>>>>");
+	}
 	
 	public void doTest(){
 		demoService.say();
