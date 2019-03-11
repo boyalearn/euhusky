@@ -3,9 +3,11 @@ package com.euhusky.register;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 
 import com.euhusky.common.URL;
+import com.euhusky.common.util.ReferenceCache;
 
 public class ZookeeperRegister implements Register{
 	
@@ -35,7 +37,8 @@ public class ZookeeperRegister implements Register{
 	@Override
 	public List<URL> subscribe(URL url) {
 		ZkClient client=getZkClient();
-		List<String> list=client.getChildren("/provider/"+url.getServiceName()+"");
+		String path="/provider/"+url.getServiceName()+"";
+		List<String> list=client.getChildren(path);
 		List<URL> urls=new ArrayList<URL>();
 		for(String u:list) {
 			URL l=new URL();
@@ -45,6 +48,24 @@ public class ZookeeperRegister implements Register{
 			l.setPort(Integer.valueOf(arr[1]));
 			urls.add(l);
 		}
+		client.subscribeChildChanges(path, new IZkChildListener() {
+
+			@Override
+			public void handleChildChange(String parentPath, List<String> currentChilds) throws Exception {
+				List<URL> urls=new ArrayList<URL>();
+				for(String u:currentChilds) {
+					URL l=new URL();
+					l.setServiceName(url.getServiceName());
+					String[] arr=u.split("[:]");
+					l.setHost(arr[0]);
+					l.setPort(Integer.valueOf(arr[1]));
+					urls.add(l);
+				}
+				ReferenceCache.setReferences(url.getServiceName(),urls);
+				
+			}
+			
+		});
 		return urls;
 	}
 

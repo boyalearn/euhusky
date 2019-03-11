@@ -14,6 +14,7 @@ import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.InjectionMetadata;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
@@ -51,7 +52,7 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
 	
 	
 	public ReferenceAnnotationBeanPostProcessor() {
-		logger.info(ReferenceAnnotationBeanPostProcessor.class.getName()+" init.....");;
+		logger.debug(ReferenceAnnotationBeanPostProcessor.class.getName()+" init.....");
 	}
 
 
@@ -189,6 +190,7 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         }
 
     }
+	@SuppressWarnings("unchecked")
 	private Object buildReferenceBean(Reference reference, Class<?> referenceClass) throws Exception {
 
         String referenceBeanCacheKey = referenceClass.getName();
@@ -201,15 +203,18 @@ public class ReferenceAnnotationBeanPostProcessor extends InstantiationAwareBean
         		referenceBean.setApplicationContext(context);
         	}
         	if(referenceClass.isInterface()){
-        		referenceBean.setRefClass(referenceClass);
+        		referenceBean.setRef(referenceClass);
         	}else{
         		if(reference.remote()){
-        			referenceBean.setRefClass(referenceClass);
+        			referenceBean.setRef(referenceClass);
         		}else{
         		    return context.getBean(referenceClass);
         		}
         	} 	
             referenceBeansCache.putIfAbsent(referenceBeanCacheKey, referenceBean);
+            if(InitializingBean.class.isAssignableFrom(referenceBean.getClass())){
+        		referenceBean.afterPropertiesSet();
+        	}
         }
 
 

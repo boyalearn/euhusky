@@ -8,4 +8,28 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>euhusky-config-api</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-remote-netty</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-register-zookeeper</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-rpc-euhusky</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

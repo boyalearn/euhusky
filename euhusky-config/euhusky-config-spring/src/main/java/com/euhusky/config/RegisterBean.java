@@ -1,6 +1,6 @@
 package com.euhusky.config;
 
-public class RegistryConfig{
+public class RegisterBean{
 	
 	private String host;
 	

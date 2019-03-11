@@ -11,7 +11,7 @@ import com.euhusky.remote.netty.docde.MessageEncode;
 import com.euhusky.remote.netty.handler.ClientHandler;
 import com.euhusky.remote.netty.handler.DataWrap;
 import com.euhusky.remote.netty.util.IOCoordinatorUtil;
-import com.euhusky.remote.transport.RequetClient;
+import com.euhusky.remote.transport.Client;
 import com.euhusky.serialization.DefaultSerializable;
 
 import io.netty.bootstrap.Bootstrap;
@@ -26,7 +26,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
-public class NettyClient implements RequetClient{
+public class NettyClient implements Client{
 	
 	private static final ConcurrentHashMap<String,Channel> channelMap=new ConcurrentHashMap<String,Channel>();
 	
@@ -101,6 +101,7 @@ public class NettyClient implements RequetClient{
 	
 	public Channel getChannel(URL url){
 		List<URL> references=ReferenceCache.getReferences(url.getServiceName());
+
 		URL refer=references.get(0);
 		url.setHost(refer.getHost());
 		url.setPort(refer.getPort());

@@ -3,7 +3,7 @@ package com.euhusky.rpc.proxy;
 
 import java.lang.reflect.Method;
 import com.euhusky.common.URL;
-import com.euhusky.remote.transport.RequetClient;
+import com.euhusky.remote.transport.Client;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -11,9 +11,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 public class CglibProxy implements MethodInterceptor{
 	
-	private RequetClient client;
+	private Client client;
 	
-	public CglibProxy(RequetClient client){
+	public CglibProxy(Client client){
 		this.client=client;
 	}
 	

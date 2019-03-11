@@ -9,7 +9,6 @@
 	<artifactId>euhusky-config-spring</artifactId>
 
 	<dependencies>
-	<!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
@@ -17,45 +16,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.euhusky</groupId>
 			<artifactId>euhusky-config-api</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-register-zookeeper</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-common</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-rpc-api</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-remote-api</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-remote-netty</artifactId>
-			<version>${euhusky.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.euhusky</groupId>
-			<artifactId>euhusky-rpc-euhusky</artifactId>
 			<version>${euhusky.version}</version>
 		</dependency>
 	</dependencies>

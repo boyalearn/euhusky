@@ -3,7 +3,7 @@ package com.euhusky.remote.netty;
 import java.net.InetSocketAddress;
 import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
-import com.euhusky.remote.transport.ServiceServer;
+import com.euhusky.remote.transport.Server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
@@ -16,7 +16,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
-public class NettyServer implements ServiceServer{
+public class NettyServer implements Server{
 	
 	ServerBootstrap  boot=new ServerBootstrap();
 	

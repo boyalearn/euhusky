@@ -1,9 +1,10 @@
 package com.euhusky.rpc.proxy;
 
-import com.euhusky.remote.transport.RequetClient;
+import com.euhusky.remote.transport.Client;
 
 public interface ProxyFactory {
 	public Object createProxy(Class<?> cls);
 	
-	public void setClient(RequetClient client);
+	public void setClient(Client client);
+	
 }

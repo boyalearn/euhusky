@@ -4,13 +4,13 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import com.euhusky.common.URL;
-import com.euhusky.remote.transport.RequetClient;
+import com.euhusky.remote.transport.Client;
 
 public class JdkProxy implements InvocationHandler{
 	
-    private RequetClient client;
+    private Client client;
 	
-	public JdkProxy(RequetClient client){
+	public JdkProxy(Client client){
 		this.client=client;
 	}
 	

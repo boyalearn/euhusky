@@ -3,6 +3,8 @@ package com.euhusky.common;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.euhusky.common.util.NetWork;
+
 public class URL implements Serializable{
 	
 	private static final long serialVersionUID = -5556351328728596310L;
@@ -18,6 +20,13 @@ public class URL implements Serializable{
 	private String host;
 	
 	private int port;
+	
+	public URL() {}
+	
+	public URL(String serviceName) {
+		this.host=NetWork.getLockIP();
+		this.serviceName=serviceName;
+	}
 
 	public String getServiceName() {
 		return serviceName;
