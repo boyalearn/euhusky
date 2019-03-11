@@ -17,14 +17,14 @@ public class URL implements Serializable{
 	
 	private Object[] params;
 	
-	private String host;
+	private String addr;
 	
 	private int port;
 	
 	public URL() {}
 	
 	public URL(String serviceName) {
-		this.host=NetWork.getLockIP();
+		this.addr=NetWork.getLockIP();
 		this.serviceName=serviceName;
 	}
 
@@ -60,12 +60,14 @@ public class URL implements Serializable{
 		this.params = params;
 	}
 
-	public String getHost() {
-		return host;
+	
+
+	public String getAddr() {
+		return addr;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
+	public void setAddr(String addr) {
+		this.addr = addr;
 	}
 
 	public int getPort() {
@@ -79,7 +81,7 @@ public class URL implements Serializable{
 	@Override
 	public String toString() {
 		return "URL [serviceName=" + serviceName + ", methodName=" + methodName + ", paramTypes="
-				+ Arrays.toString(paramTypes) + ", params=" + Arrays.toString(params) + ", host=" + host + ", port="
+				+ Arrays.toString(paramTypes) + ", params=" + Arrays.toString(params) + ", addr=" + addr + ", port="
 				+ port + "]";
 	}
 

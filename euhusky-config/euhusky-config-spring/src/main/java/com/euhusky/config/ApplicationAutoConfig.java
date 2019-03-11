@@ -18,6 +18,7 @@ import com.euhusky.rpc.proxy.SimpleProxyFactory;
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationAutoConfig{
 	
+	@SuppressWarnings("unused")
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

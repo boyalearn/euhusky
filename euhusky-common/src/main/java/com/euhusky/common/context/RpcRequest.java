@@ -1,4 +1,4 @@
-package com.euhusky.rpc.context;
+package com.euhusky.common.context;
 
 import java.io.Serializable;
 import java.util.Arrays;

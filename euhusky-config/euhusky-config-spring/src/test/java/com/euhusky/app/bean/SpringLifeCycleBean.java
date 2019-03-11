@@ -64,6 +64,7 @@ public class SpringLifeCycleBean implements BeanFactoryAware, BeanNameAware,Init
 		return "SpringLifeCycleBean [name=" + name + "]";
 	}
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		System.out.println("现在开始初始化容器");
 		ApplicationContext factory = new ClassPathXmlApplicationContext("beans.xml");

@@ -5,6 +5,7 @@ import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
 import com.euhusky.remote.transport.Server;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
@@ -42,7 +43,7 @@ public class NettyServer implements Server{
 	public void start(int PORT) {
 		boot.group(boss,work);
 		boot.channel(NioServerSocketChannel.class);
-		boot.option(ChannelOption.TCP_NODELAY, true);
+		boot.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 		boot.childHandler(new ChannelInitializer<SocketChannel>() {
 			protected void initChannel(SocketChannel channel) throws Exception {
 				channel.pipeline().addLast("decoder", new MessageDecode());

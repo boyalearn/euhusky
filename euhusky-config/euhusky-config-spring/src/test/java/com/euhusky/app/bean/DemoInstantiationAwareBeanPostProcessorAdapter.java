@@ -46,6 +46,7 @@ public class DemoInstantiationAwareBeanPostProcessorAdapter extends Instantiatio
 		return super.postProcessProperties(pvs, bean, beanName);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean,
 			String beanName) throws BeansException {

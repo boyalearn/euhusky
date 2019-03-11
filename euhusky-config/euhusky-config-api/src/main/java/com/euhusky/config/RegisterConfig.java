@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.euhusky.common.URL;
 import com.euhusky.register.Register;
-import com.euhusky.register.ZookeeperRegister;
+import com.euhusky.register.ZKClientRegister;
 
 
 public class RegisterConfig implements Config{
@@ -38,7 +38,7 @@ public class RegisterConfig implements Config{
 	
 	public void init() {
 		if(register==null) {
-			this.register=new ZookeeperRegister();
+			this.register=new ZKClientRegister();
 			this.register.setRegisterUrl(this.address.get(0));
 		}
 	}

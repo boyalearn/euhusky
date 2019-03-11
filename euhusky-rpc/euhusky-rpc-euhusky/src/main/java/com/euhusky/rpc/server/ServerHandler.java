@@ -33,6 +33,4 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
 		logger.error(cause.getLocalizedMessage());
 	}
 	
-	
-
 }

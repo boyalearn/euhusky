@@ -3,6 +3,7 @@ package com.euhusky.remote.netty;
 import com.euhusky.common.URL;
 
 public class ClientTest {
+	@SuppressWarnings("unused")
 	public static void main(String[] args){
 		NettyClient client=new NettyClient();
 		URL url=new URL();

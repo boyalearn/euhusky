@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.euhusky.common.URL;
+import com.euhusky.common.exception.RpcException;
 import com.euhusky.common.util.ReferenceCache;
 import com.euhusky.remote.netty.docde.MessageDecode;
 import com.euhusky.remote.netty.docde.MessageEncode;
@@ -65,13 +66,11 @@ public class NettyClient implements Client{
 	public Channel connect(URL url){
 		isConnect=true;
 		try {
-			ChannelFuture f = boot.connect(url.getHost(), url.getPort()).sync();
+			ChannelFuture f = boot.connect(url.getAddr(), url.getPort()).sync();
 			channel=f.channel();
-			NettyClient.channelMap.put(url.getHost()+":"+url.getPort(), channel);
+			NettyClient.channelMap.put(url.getAddr()+":"+url.getPort(), channel);
 			return channel;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -94,18 +93,26 @@ public class NettyClient implements Client{
 		warp.setData(url);
 		warp.setDataId(currId);
 		IOCoordinatorUtil.add(warp);
-		getChannel(url).writeAndFlush(serialutil.serialize(warp));
-		warp.await();
-		return warp.getData();
+		try {
+			getChannel(url).writeAndFlush(serialutil.serialize(warp));
+			warp.await();
+			return warp.getData();
+		} catch (RpcException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public Channel getChannel(URL url){
+	public Channel getChannel(URL url) throws RpcException{
 		List<URL> references=ReferenceCache.getReferences(url.getServiceName());
+		if(null==references||references.size()<=0) {
+			throw new RpcException("no references for name "+url.getServiceName());
+		}
 
 		URL refer=references.get(0);
-		url.setHost(refer.getHost());
+		url.setAddr(refer.getAddr());
 		url.setPort(refer.getPort());
-		String host=refer.getHost()+":"+refer.getPort();
+		String host=refer.getAddr()+":"+refer.getPort();
 		Channel channel=channelMap.get(host);
 		if(null==channel){
 			channel=connect(url);
