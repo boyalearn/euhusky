@@ -9,7 +9,7 @@ public interface Register {
 	
 	public static final String COLON=":";
 
-	public static final String PROVIDER_FIX=FILE_SPLITTER+"provider";
+	public static final String PROVIDER_FIX="provider";
 	
 	public void setRegisterUrl(String connectionString);
 	

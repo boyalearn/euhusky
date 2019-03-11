@@ -28,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.euhusky</groupId>
+			<artifactId>euhusky-cluster-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.euhusky</groupId>
 			<artifactId>euhusky-serialization-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

@@ -30,7 +30,7 @@ public class ZKClientRegister implements Register,IZkChildListener{
 		
 		ZkClient client=getZkClient();
 		
-		String servicePath=FILE_SPLITTER+PROVIDER_FIX+url.getServiceName();
+		String servicePath=FILE_SPLITTER+PROVIDER_FIX+FILE_SPLITTER+url.getServiceName();
 		if(!client.exists(servicePath)){
 			client.createPersistent(servicePath, true);
 		}
@@ -47,7 +47,7 @@ public class ZKClientRegister implements Register,IZkChildListener{
 	public List<URL> subscribe(URL url) {
 		
 		ZkClient client=getZkClient();
-		String path=FILE_SPLITTER+PROVIDER_FIX+url.getServiceName();
+		String path=FILE_SPLITTER+PROVIDER_FIX+FILE_SPLITTER+url.getServiceName();
 		
 		//获取被订阅的子节点。
 		List<String> list=client.getChildren(path);
@@ -60,7 +60,7 @@ public class ZKClientRegister implements Register,IZkChildListener{
 			l.setPort(Integer.valueOf(arr[1]));
 			urls.add(l);
 		}
-		
+		ReferenceCache.setReferences(url.getServiceName(),urls);
 		//注册节点数据变更事件。
 		client.subscribeChildChanges(path, this);
 		return urls;
@@ -75,7 +75,7 @@ public class ZKClientRegister implements Register,IZkChildListener{
 	public void handleChildChange(String parentPath, List<String> currentChilds) throws Exception {
 		
 		List<URL> urls=new ArrayList<URL>();
-		String serviceName=parentPath.substring(parentPath.lastIndexOf(FILE_SPLITTER));
+		String serviceName=parentPath.substring(parentPath.lastIndexOf(FILE_SPLITTER)+1);
 		
 		for(String u:currentChilds) {
 			

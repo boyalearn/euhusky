@@ -2,8 +2,10 @@ package com.euhusky.remote.netty;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.euhusky.cluster.support.RoundRobinLoadBalance;
 import com.euhusky.common.URL;
 import com.euhusky.common.exception.RpcException;
 import com.euhusky.common.util.ReferenceCache;
@@ -65,14 +67,15 @@ public class NettyClient implements Client{
 	
 	public Channel connect(URL url){
 		isConnect=true;
-		try {
-			ChannelFuture f = boot.connect(url.getAddr(), url.getPort()).sync();
+		ChannelFuture f = boot.connect(url.getAddr(), url.getPort());
+		boolean ret= f.awaitUninterruptibly(20, TimeUnit.SECONDS);
+		if(ret && f.isSuccess()) {
 			channel=f.channel();
 			NettyClient.channelMap.put(url.getAddr()+":"+url.getPort(), channel);
 			return channel;
-		} catch (InterruptedException e) {
-			return null;
 		}
+		return null;
+		
 	}
 	
 	
@@ -108,8 +111,7 @@ public class NettyClient implements Client{
 		if(null==references||references.size()<=0) {
 			throw new RpcException("no references for name "+url.getServiceName());
 		}
-
-		URL refer=references.get(0);
+		URL refer=RoundRobinLoadBalance.select(references);
 		url.setAddr(refer.getAddr());
 		url.setPort(refer.getPort());
 		String host=refer.getAddr()+":"+refer.getPort();
